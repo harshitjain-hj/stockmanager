@@ -5,14 +5,14 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Add Customer</div>
+                <div class="card-header">Add Item</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('customer.store') }}">
+                    <form method="POST" action="{{ route('item.store') }}">
                         @csrf
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Item name') }}</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
@@ -26,12 +26,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
+                            <label for="sku" class="col-md-4 col-form-label text-md-right">{{ __('SKU') }}</label>
 
                             <div class="col-md-6">
-                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" autocomplete="address">
+                                <input id="sku" type="text" class="form-control @error('sku') is-invalid @enderror" name="sku" value="{{ old('sku') }}" required autocomplete="sku">
 
-                                @error('address')
+                                @error('sku')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -40,12 +40,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="mobileno" class="col-md-4 col-form-label text-md-right">{{ __('Mobile no') }}</label>
+                            <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                             <div class="col-md-6">
-                                <input id="mobileno" type="tel" class="form-control @error('mobileno') is-invalid @enderror" pattern="[0-9]{10}" name="mobileno" required autocomplete="mobileno">
+                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" autocomplete="description">
 
-                                @error('mobileno')
+                                @error('description')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -54,12 +54,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="other" class="col-md-4 col-form-label text-md-right">{{ __('Other no') }}</label>
+                            <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Image url') }}</label>
 
                             <div class="col-md-6">
-                                <input id="other" type="tel" class="form-control @error('other') is-invalid @enderror" pattern="[0-9]{10}" name="other" autocomplete="other">
+                                <input id="image" type="text" class="form-control @error('image') is-invalid @enderror" name="image" autocomplete="image">
 
-                                @error('other')
+                                @error('image')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

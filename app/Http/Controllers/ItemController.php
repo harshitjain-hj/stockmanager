@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Customer;
+use App\Item;
 use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,9 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::all();
-        // dd($customers);
-        return view('customer.index', compact('customers'));
+        $items = Item::all();
+        // dd($customer);
+        return view('item.index', compact('items'));
     }
 
     /**
@@ -26,7 +26,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customer.create');
+        return view('item.create');
     }
 
     /**
@@ -39,25 +39,25 @@ class CustomerController extends Controller
     {
         //validating data
         $data = request()->validate([
-            'name' => 'required|unique:customers',
-            'address' => 'string|nullable',
-            'mobileno' => 'required|regex:/[0-9]{10}/',
-            'other' => 'nullable|regex:/[0-9]{10}/',
+            'name' => 'required|unique:items',
+            'sku' => 'required|string',
+            'description' => 'string|nullable',
+            'image' => 'url|nullable',
         ]);
         // dd($data);
         
-        $customer = new Customer($data);
-        $customer->save();
-        return redirect()->route('customer.index');
+        $item = new Item($data);
+        $item->save();
+        return redirect()->route('item.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Customer  $customer
+     * @param  \App\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer)
+    public function show(Item $item)
     {
         //
     }
@@ -65,10 +65,10 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Customer  $customer
+     * @param  \App\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit(Item $item)
     {
         //
     }
@@ -77,10 +77,10 @@ class CustomerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Customer  $customer
+     * @param  \App\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Item $item)
     {
         //
     }
@@ -88,10 +88,10 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Customer  $customer
+     * @param  \App\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy(Item $item)
     {
         //
     }

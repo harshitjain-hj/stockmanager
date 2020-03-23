@@ -12,3 +12,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // All customer routes
 Route::resource('/customer', 'CustomerController')->middleware('auth');
+
+Route::resource('/item', 'ItemController')->middleware('auth');

@@ -96,6 +96,34 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="given_amount" class="col-md-4 col-form-label text-md-right">{{ __('Amount given') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="given_amount" type="text" class="form-control @error('given_amount') is-invalid @enderror" name="given_amount" autocomplete="given_amount">
+
+                                @error('given_amount')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="given_crate" class="col-md-4 col-form-label text-md-right">{{ __('Crate given') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="given_crate" type="text" class="form-control @error('given_crate') is-invalid @enderror" name="given_crate" autocomplete="given_crate">
+
+                                @error('given_crate')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                             <div class="col-md-6">

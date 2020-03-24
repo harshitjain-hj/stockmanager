@@ -21,6 +21,8 @@ class CreateSalesTable extends Migration
             $table->unsignedTinyInteger('qty');
             $table->unsignedInteger('amount');
             $table->unsignedInteger('total_amount');
+            $table->unsignedInteger('given_amount')->nullable();
+            $table->unsignedTinyInteger('given_assets')->nullable();
             $table->date('bill_date');
             $table->text('description')->nullable();
             $table->timestamps();

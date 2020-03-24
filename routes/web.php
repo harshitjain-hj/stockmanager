@@ -18,3 +18,6 @@ Route::resource('/item', 'ItemController')->middleware('auth');
 
 // All sales routes 
 Route::resource('/sale', 'SaleController')->middleware('auth');
+
+// All customer report routes 
+Route::resource('/repo', 'CustomerRepoController')->middleware('auth');

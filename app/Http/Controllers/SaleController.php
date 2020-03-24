@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Sale;
+use App\CustomerRepo;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -38,7 +39,7 @@ class SaleController extends Controller
     public function store(Request $request)
     {
         //validating data
-        $data = request()->validate([
+        $saledata = request()->validate([
             'bill_no' => 'required|numeric|unique:sales',
             'customer_id' => 'required|numeric',
             'item_id' => 'required|numeric',
@@ -46,13 +47,39 @@ class SaleController extends Controller
             'amount' => 'required|numeric',
             'bill_date' => 'required|date',
             'description' => 'string|nullable',
+            'given_amount' => 'nullable|numeric',
+            'given_crate' => 'nullable|numeric',
         ]);
 
-        $data['total_amount'] = (string)($data['qty'] * $data['amount']);
-        // dd($data);
+        $saledata['total_amount'] = (string)($saledata['qty'] * $saledata['amount']);
+        // dd($saledata);
 
+
+        $customer_repo = CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->select('total_amount', 'remain_amount', 'remain_assets')->first();
+        // dd($customer_repo);
+        if(empty($customer_repo)) {
+
+            $repocreationdata = ([
+                'customer_id' => $saledata['customer_id'],
+                'item_id' => $saledata['item_id'],
+                'total_amount' => $saledata['total_amount'],
+                'remain_amount' => $saledata['total_amount'] - $saledata['given_amount'],
+                'remain_assets' => $saledata['qty'] - $saledata['given_crate'],
+            ]);
+            $repo = new CustomerRepo($repocreationdata);
+            $repo->save();
+
+        } else {
+
+            CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->update([
+                'total_amount' => $customer_repo['total_amount'] + $saledata['total_amount'],
+                'remain_amount' => $customer_repo['remain_amount'] + $saledata['total_amount'] - $saledata['given_amount'],
+                'remain_assets' => $customer_repo['remain_assets'] + $saledata['qty'] - $saledata['given_crate'],
+            ]);
+            
+        }
         
-        $sale = new Sale($data);
+        $sale = new Sale($saledata);
         $sale->save();
         return redirect()->route('sale.index');
     }

@@ -21,6 +21,8 @@ class SalesTableSeeder extends Seeder
             'qty' => '2',
             'amount' => '200',
             'total_amount' => '400',
+            'given_amount' => '200',
+            'given_assets' => '1',
             'bill_date' => date("Y-m-d"),
             'description' => 'Description about bill',
         ]);

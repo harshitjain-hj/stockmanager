@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-around">
                     <div class="row ">
@@ -14,7 +14,7 @@
 
                 <div class="card-body">
                     <?php $items = json_decode( $items, true ); ?>
-                    <table class="table table-hover table-responsive-lg">
+                    <table class="table table-hover table-sm table-responsive-lg">
                         <thead>
                             <tr>
                                 @foreach($items[0] as $key => $value)

@@ -52,17 +52,35 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('customer.index') }}">{{ __('Customers') }}</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sales</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="{{ route('sale.index') }}">{{ __('Sales') }}</a>
+                                    <a class="dropdown-item" href="{{ route('customer.index') }}">{{ __('Customers') }}</a>
+                                    <a class="dropdown-item" href="{{ route('item.index') }}">{{ __('Items') }}</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('repo.index') }}">{{ __('Report') }}</a>
+                                </div>
                             </li>
-                            <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('item.index') }}">{{ __('Items') }}</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Stock</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="{{ route('sale.index') }}">{{ __('Sales') }}</a>
+                                    <a class="dropdown-item" href="{{ route('customer.index') }}">{{ __('Customers') }}</a>
+                                    <a class="dropdown-item" href="{{ route('item.index') }}">{{ __('Items') }}</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('repo.index') }}">{{ __('Report') }}</a>
+                                </div>
                             </li>
-                            <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('sale.index') }}">{{ __('Sales') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('repo.index') }}">{{ __('Report') }}</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Store</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="{{ route('sale.index') }}">{{ __('Sales') }}</a>
+                                    <a class="dropdown-item" href="{{ route('customer.index') }}">{{ __('Customers') }}</a>
+                                    <a class="dropdown-item" href="{{ route('item.index') }}">{{ __('Items') }}</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('repo.index') }}">{{ __('Report') }}</a>
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

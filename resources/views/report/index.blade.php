@@ -14,12 +14,18 @@
 
                 <div class="card-body">
                     <?php $repos = json_decode( $repos, true ); ?>
-                    <table class="table table-hover table-responsive-lg">
+                    <?php $customers = json_decode( $customers, true ); ?>
+                    <?php $items = json_decode( $items, true ); ?>
+                    <table class="table table-hover table-sm table-responsive-lg">
                         <thead>
                             <tr>
                                 @foreach($repos[0] as $key => $value)
-                                    @if($key == 'created_at' || $key == 'updated_at')
-                                            
+                                    @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
+
+                                    @elseif ($key == 'customer_id')
+                                        <th scope="col">customer_name</th>
+                                    @elseif ($key == 'item_id')
+                                        <th scope="col">item_name</th>        
                                     @else
                                         <th scope="col">{{ $key}}</th>
                                     @endif  
@@ -30,10 +36,23 @@
                             @foreach($repos as $repo)
                                 <tr>
                                     @foreach($repo as $key => $value)
-                                        @if($key == 'id')
-                                            <th scope="row">{{$value}}</th>
-                                        @elseif($key == 'created_at' || $key == 'updated_at')
+                                        @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
 
+                                        @elseif ($key == 'customer_id')
+                                            <?php 
+                                                $key = array_search($value, array_column($customers, 'name'));
+                                                $name = $customers[$key]['name'];
+                                                // dd($name);
+                                            ?>
+                                            <td>{{$name}}</td>
+                                        @elseif ($key == 'item_id')
+                                            <?php 
+                                                $key = array_search($value, array_column($items, 'name'));
+                                                $name = $items[$key]['name'];
+                                                $sku = $items[$key]['sku'];
+                                                // dd($name);
+                                            ?>
+                                            <td>{{$name}}|{{$sku}}</td>
                                         @else
                                             <td>{{$value}}</td>
                                         @endif

@@ -14,7 +14,7 @@
 
                 <div class="card-body">
                     <?php $customers = json_decode( $customers, true ); ?>
-                    <table class="table table-hover table-responsive-lg">
+                    <table class="table table-hover table-sm table-responsive-lg">
                         <thead>
                             <tr>
                                 @foreach($customers[0] as $key => $value)

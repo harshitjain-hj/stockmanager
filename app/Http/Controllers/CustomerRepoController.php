@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+// Specific
 use App\CustomerRepo;
+
+// Helper
+use App\Customer;
+use App\Item;
+use App\Sale;
+
 use Illuminate\Http\Request;
 
 class CustomerRepoController extends Controller
@@ -16,7 +23,9 @@ class CustomerRepoController extends Controller
     {
         $repos = CustomerRepo::all();
         // dd($repos);
-        return view('report.index', compact('repos'));
+        $customers = Customer::select('id', 'name')->get();
+        $items = Item::select('id', 'name', 'sku')->get();
+        return view('report.index', compact('repos', 'customers', 'items'));
     }
 
     /**
@@ -48,7 +57,14 @@ class CustomerRepoController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = Customer::where('id', $id)->select('name')->first();
+        $name = $customer['name'];
+        // dd($name);
+        $items = Item::select('id', 'name', 'sku')->get();
+        $repo = CustomerRepo::where('customer_id', $id)->first();
+        $sales = Sale::where('customer_id', $id)->get();
+        // dd($sales);
+        return view('report.show', compact('repo', 'name', 'items', 'sales'));
     }
 
     /**

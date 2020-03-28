@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+// Specific
 use App\Sale;
 use App\CustomerRepo;
+
+// Helper
+use App\Customer;
+use App\Item;
+
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -17,7 +23,10 @@ class SaleController extends Controller
     {
         $sales = Sale::all();
         // dd($sales);
-        return view('sale.index', compact('sales'));
+        $customers = Customer::select('id', 'name')->get();
+        $items = Item::select('id', 'name', 'sku')->get();
+        // dd($customers);
+        return view('sale.index', compact('sales', 'customers', 'items'));
     }
 
     /**
@@ -92,7 +101,7 @@ class SaleController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**

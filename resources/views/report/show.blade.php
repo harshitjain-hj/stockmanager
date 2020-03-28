@@ -3,20 +3,26 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-around">
-                    <div class="row ">
-                        <div class="col"><h1>Sales</h1></div>
-                        <div class="col"><a type="button" class="btn btn-secondary" href="{{ route('sale.create') }}"><span class="material-icons pr-1 " style="vertical-align: -2px;">add_circle</span><span style="vertical-align: 4px;" >ADD</span></a></div>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <?php $sales = json_decode( $sales, true ); ?>
-                    <?php $customers = json_decode( $customers, true ); ?>
+                <div class="card-header">
                     <?php $items = json_decode( $items, true ); ?>
-                    <table class="table table-hover table-sm table-responsive-lg">
+                    <?php 
+                        $key = array_search($repo['item_id'], array_column($items, 'id'));
+                        $item_name = $items[$key]['name'];
+                        // dd($name);
+                    ?>
+                    <nav class="nav nav-pills nav-fill lead">
+                        <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$name}}</span></li>
+                        <li class="nav-item nav-link">Item Name: <span class="text-dark font-weight-bold">{{$item_name}}</span></li>
+                        <li class="nav-item nav-link">Total Amount: <span class="text-primary font-weight-bold">{{$repo['total_amount']}}</span></li>
+                        <li class="nav-item nav-link">Remain Amount: <span class="text-danger font-weight-bold">{{$repo['remain_amount']}}</span></li>
+                        <li class="nav-item nav-link">Remain Assets: <span class="text-danger font-weight-bold">{{$repo['remain_assets']}}</span></li>
+					</nav>
+                </div>
+                <div class="card-body">
+                <table class="table table-hover  table-sm table-responsive-lg">
+                    <?php $sales = json_decode( $sales, true ); ?>
                         <thead>
                             <tr>
                                 @foreach($sales[0] as $key => $value)
@@ -43,11 +49,6 @@
                                         @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id')
 
                                         @elseif ($key == 'customer_id')
-                                            <?php 
-                                                $key = array_search($value, array_column($customers, 'name'));
-                                                $name = $customers[$key]['name'];
-                                                // dd($name);
-                                            ?>
                                             <td>{{$name}}</td>
                                         @elseif ($key == 'item_id')
                                             <?php 

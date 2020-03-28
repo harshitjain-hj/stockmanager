@@ -10,14 +10,16 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-// All customer routes
-Route::resource('/customer', 'CustomerController')->middleware('auth');
 
-// All item routes
-Route::resource('/item', 'ItemController')->middleware('auth');
+// Sales Routes
+    // All customer routes
+    Route::resource('/customer', 'Sale\CustomerController')->middleware('auth');
 
-// All sales routes 
-Route::resource('/sale', 'SaleController')->middleware('auth');
+    // All item routes
+    Route::resource('/item', 'Sale\ItemController')->middleware('auth');
 
-// All customer report routes 
-Route::resource('/repo', 'CustomerRepoController')->middleware('auth');
+    // All sales routes 
+    Route::resource('/sale', 'Sale\SaleController')->middleware('auth');
+
+    // All customer report routes 
+    Route::resource('/repo', 'Sale\CustomerRepoController')->middleware('auth');

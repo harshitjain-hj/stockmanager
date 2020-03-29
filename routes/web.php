@@ -10,13 +10,18 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// Stock Routes
+    // All item routes
+    Route::resource('/item', 'Stock\ItemController')->middleware('auth');
+
+    Route::get('/lorryinfo', 'Stock\LorryInfoController@index')->middleware('auth');
+
+    // All stock routes
+    Route::resource('/stock', 'Stock\StockController')->middleware('auth');
 
 // Sales Routes
     // All customer routes
     Route::resource('/customer', 'Sale\CustomerController')->middleware('auth');
-
-    // All item routes
-    Route::resource('/item', 'Sale\ItemController')->middleware('auth');
 
     // All sales routes 
     Route::resource('/sale', 'Sale\SaleController')->middleware('auth');

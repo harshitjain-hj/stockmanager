@@ -11,6 +11,7 @@ use App\CustomerRepo;
 // Helper
 use App\Customer;
 use App\Item;
+use App\Stock;
 
 use Illuminate\Http\Request;
 
@@ -65,11 +66,9 @@ class SaleController extends Controller
         $saledata['total_amount'] = (string)($saledata['qty'] * $saledata['amount']);
         // dd($saledata);
 
-
         $customer_repo = CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->select('total_amount', 'remain_amount', 'remain_assets')->first();
         // dd($customer_repo);
         if(empty($customer_repo)) {
-
             $repocreationdata = ([
                 'customer_id' => $saledata['customer_id'],
                 'item_id' => $saledata['item_id'],
@@ -81,15 +80,20 @@ class SaleController extends Controller
             $repo->save();
 
         } else {
-
             CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->update([
                 'total_amount' => $customer_repo['total_amount'] + $saledata['total_amount'],
                 'remain_amount' => $customer_repo['remain_amount'] + $saledata['total_amount'] - $saledata['given_amount'],
                 'remain_assets' => $customer_repo['remain_assets'] + $saledata['qty'] - $saledata['given_crate'],
             ]);
-            
         }
         
+        $stock = Stock::where(['item_id'=> $saledata['item_id']])->select('unit_remain', 'updated_at')->first(); 
+
+        Stock::where(['item_id'=> $saledata['item_id']])->update([
+            'unit_remain' => $stock['unit_remain'] - $saledata['qty'],
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
         $sale = new Sale($saledata);
         $sale->save();
         return redirect()->route('sale.index');

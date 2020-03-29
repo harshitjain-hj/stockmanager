@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Sale;
+namespace App\Http\Controllers\Stock;
 
 use App\Http\Controllers\Controller;
 

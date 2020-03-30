@@ -14,36 +14,42 @@
 
                 <div class="card-body">
                     <?php $lorry_infos = json_decode( $lorry_infos, true ); ?>
-                    <table class="table table-hover table-sm table-responsive-lg">
-                        <thead>
-                            <tr>
-                                @foreach($lorry_infos[0] as $key => $value)
-                                    @if($key == 'id' || $key == 'name' || $key == 'updated_at')
-
-                                    @elseif($key == 'item_id')
-                                    <th scope="col">Item Name</th>    
-                                    @else
-                                        <th scope="col">{{ $key }}</th>
-                                    @endif
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($lorry_infos as $lorry_info)
+                    @if(!empty($lorry_infos))
+                        <table class="table table-hover table-sm table-responsive-lg">
+                            <thead>
                                 <tr>
-                                    @foreach($lorry_info as $key => $value)
+                                    @foreach($lorry_infos[0] as $key => $value)
                                         @if($key == 'id' || $key == 'name' || $key == 'updated_at')
 
                                         @elseif($key == 'item_id')
-                                            <td>{{$lorry_info['name']}}</td>
+                                        <th scope="col">Item Name</th>    
                                         @else
-                                            <td>{{$value}}</td>
+                                            <th scope="col">{{ $key }}</th>
                                         @endif
                                     @endforeach
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($lorry_infos as $lorry_info)
+                                    <tr>
+                                        @foreach($lorry_info as $key => $value)
+                                            @if($key == 'id' || $key == 'name' || $key == 'updated_at')
+
+                                            @elseif($key == 'item_id')
+                                                <td>{{$lorry_info['name']}}</td>
+                                            @else
+                                                <td>{{$value}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="alert text-white bg-dark text-center" role="alert">
+                            No records found.
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

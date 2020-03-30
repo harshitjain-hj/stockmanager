@@ -14,34 +14,40 @@
 
                 <div class="card-body">
                     <?php $customers = json_decode( $customers, true ); ?>
-                    <table class="table table-hover table-sm table-responsive-lg">
-                        <thead>
-                            <tr>
-                                @foreach($customers[0] as $key => $value)
-                                    @if($key == 'created_at' || $key == 'updated_at')
-                                            
-                                    @else
-                                        <th scope="col">{{ $key}}</th>
-                                    @endif
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($customers as $customer)
+                    @if(!empty($customers))
+                        <table class="table table-hover table-sm table-responsive-lg">
+                            <thead>
                                 <tr>
-                                    @foreach($customer as $key => $value)
-                                        @if($key == 'id')
-                                            <th scope="row">{{$value}}</th>
-                                        @elseif($key == 'created_at' || $key == 'updated_at')
-
+                                    @foreach($customers[0] as $key => $value)
+                                        @if($key == 'created_at' || $key == 'updated_at')
+                                                
                                         @else
-                                            <td>{{$value}}</td>
+                                            <th scope="col">{{ $key}}</th>
                                         @endif
                                     @endforeach
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($customers as $customer)
+                                    <tr>
+                                        @foreach($customer as $key => $value)
+                                            @if($key == 'id')
+                                                <th scope="row">{{$value}}</th>
+                                            @elseif($key == 'created_at' || $key == 'updated_at')
+
+                                            @else
+                                                <td>{{$value}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="alert text-white bg-dark text-center" role="alert">
+                            No customer recorded.
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

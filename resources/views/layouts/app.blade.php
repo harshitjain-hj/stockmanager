@@ -67,7 +67,7 @@
                                     <a class="dropdown-item" href="{{ route('stock.index') }}">{{ __('Stock') }}</a>
                                     <a class="dropdown-item" href="{{ route('item.index') }}">{{ __('Items') }}</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ route('repo.index') }}">{{ __('Report') }}</a>
+                                    <a class="dropdown-item" href="{{ url('lorryinfo') }}">{{ __('Lorry Info') }}</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">

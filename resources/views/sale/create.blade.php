@@ -26,31 +26,27 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="customer_id" class="col-md-4 col-form-label text-md-right">{{ __('Customer Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="customer_id" type="text" class="form-control @error('customer_id') is-invalid @enderror" name="customer_id" value="{{ old('customer_id') }}" required autocomplete="customer_id">
-
-                                @error('customer_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+						   <label for="customer_id" class="col-md-4 col-form-label text-md-right">Customer Name</label>
+						   <div class="col-md-6">
+							   <select class="form-control" id="customer_id" name="customer_id" value="{{ old('customer_id') }}">
+								   <option selected>Choose customer...</option>
+									@foreach ($customers as $customer)
+		 								<option name="customer_id" value="{{ $customer['id'] }}">{{ $customer['name'] }}</option>
+		 							@endforeach
+							   </select>
+						   </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="item_id" class="col-md-4 col-form-label text-md-right">{{ __('Item Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="item_id" type="text" class="form-control @error('item_id') is-invalid @enderror" name="item_id" required autocomplete="item_id">
-
-                                @error('item_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+						   <label for="item_id" class="col-md-4 col-form-label text-md-right">Item Name</label>
+						   <div class="col-md-6">
+							   <select class="form-control" id="item_id" name="item_id" value="{{ old('item_id') }}">
+								   <option selected>Choose item...</option>
+									@foreach ($items as $item)
+		 								<option name="item_id" value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+		 							@endforeach
+							   </select>
+						   </div>
                         </div>
 
                         <div class="form-group row">
@@ -110,12 +106,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="given_crate" class="col-md-4 col-form-label text-md-right">{{ __('Crate given') }}</label>
+                            <label for="given_assets" class="col-md-4 col-form-label text-md-right">{{ __('Crate given') }}</label>
 
                             <div class="col-md-6">
-                                <input id="given_crate" type="text" class="form-control @error('given_crate') is-invalid @enderror" name="given_crate" autocomplete="given_crate">
+                                <input id="given_assets" type="text" class="form-control @error('given_assets') is-invalid @enderror" name="given_assets" autocomplete="given_assets">
 
-                                @error('given_crate')
+                                @error('given_assets')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

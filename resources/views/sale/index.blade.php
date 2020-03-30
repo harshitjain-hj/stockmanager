@@ -16,55 +16,61 @@
                     <?php $sales = json_decode( $sales, true ); ?>
                     <?php $customers = json_decode( $customers, true ); ?>
                     <?php $items = json_decode( $items, true ); ?>
-                    <table class="table table-hover table-sm table-responsive-lg">
-                        <thead>
-                            <tr>
-                                @foreach($sales[0] as $key => $value)
-                                    @if($key == 'bill_no')
-                                        <th scope="row">{{$key}}</th>
-                                    @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id')
-                                            
-                                    @elseif ($key == 'customer_id')
-                                        <th scope="col">customer_name</th>
-                                    @elseif ($key == 'item_id')
-                                        <th scope="col">item_name</th>
-                                    @else
-                                        <th scope="col">{{ $key}}</th>
-                                    @endif  
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($sales as $sale)
+                    @if(!empty($sales))
+                        <table class="table table-hover table-sm table-responsive-lg">
+                            <thead>
                                 <tr>
-                                    @foreach($sale as $key => $value)
+                                    @foreach($sales[0] as $key => $value)
                                         @if($key == 'bill_no')
-                                            <th scope="row">{{$value}}</th>
+                                            <th scope="row">{{$key}}</th>
                                         @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id')
-
+                                                
                                         @elseif ($key == 'customer_id')
-                                            <?php 
-                                                $key = array_search($value, array_column($customers, 'name'));
-                                                $name = $customers[$key]['name'];
-                                                // dd($name);
-                                            ?>
-                                            <td>{{$name}}</td>
+                                            <th scope="col">customer_name</th>
                                         @elseif ($key == 'item_id')
-                                            <?php 
-                                                $key = array_search($value, array_column($items, 'name'));
-                                                $name = $items[$key]['name'];
-                                                $sku = $items[$key]['sku'];
-                                                // dd($name);
-                                            ?>
-                                            <td>{{$name}}|{{$sku}}</td>
+                                            <th scope="col">item_name</th>
                                         @else
-                                            <td>{{$value}}</td>
-                                        @endif
+                                            <th scope="col">{{ $key}}</th>
+                                        @endif  
                                     @endforeach
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($sales as $sale)
+                                    <tr>
+                                        @foreach($sale as $key => $value)
+                                            @if($key == 'bill_no')
+                                                <th scope="row">{{$value}}</th>
+                                            @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id')
+
+                                            @elseif ($key == 'customer_id')
+                                                <?php 
+                                                    $key = array_search($value, array_column($customers, 'name'));
+                                                    $name = $customers[$key]['name'];
+                                                    // dd($name);
+                                                ?>
+                                                <td>{{$name}}</td>
+                                            @elseif ($key == 'item_id')
+                                                <?php 
+                                                    $key = array_search($value, array_column($items, 'name'));
+                                                    $name = $items[$key]['name'];
+                                                    $sku = $items[$key]['sku'];
+                                                    // dd($name);
+                                                ?>
+                                                <td>{{$name}}|{{$sku}}</td>
+                                            @else
+                                                <td>{{$value}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="alert text-white bg-dark text-center" role="alert">
+                            Currently no sale.
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

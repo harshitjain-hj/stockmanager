@@ -39,7 +39,9 @@ class SaleController extends Controller
      */
     public function create()
     {
-        return view('sale.create');
+        $customers = Customer::select('id', 'name')->get();
+        $items = Item::select('id', 'name')->get();
+        return view('sale.create', compact('customers', 'items'));
     }
 
     /**
@@ -60,7 +62,7 @@ class SaleController extends Controller
             'bill_date' => 'required|date',
             'description' => 'string|nullable',
             'given_amount' => 'nullable|numeric',
-            'given_crate' => 'nullable|numeric',
+            'given_assets' => 'nullable|numeric',
         ]);
 
         $saledata['total_amount'] = (string)($saledata['qty'] * $saledata['amount']);
@@ -68,13 +70,14 @@ class SaleController extends Controller
 
         $customer_repo = CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->select('total_amount', 'remain_amount', 'remain_assets')->first();
         // dd($customer_repo);
+        
         if(empty($customer_repo)) {
             $repocreationdata = ([
                 'customer_id' => $saledata['customer_id'],
                 'item_id' => $saledata['item_id'],
                 'total_amount' => $saledata['total_amount'],
                 'remain_amount' => $saledata['total_amount'] - $saledata['given_amount'],
-                'remain_assets' => $saledata['qty'] - $saledata['given_crate'],
+                'remain_assets' => $saledata['qty'] - $saledata['given_assets'],
             ]);
             $repo = new CustomerRepo($repocreationdata);
             $repo->save();
@@ -83,7 +86,7 @@ class SaleController extends Controller
             CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->update([
                 'total_amount' => $customer_repo['total_amount'] + $saledata['total_amount'],
                 'remain_amount' => $customer_repo['remain_amount'] + $saledata['total_amount'] - $saledata['given_amount'],
-                'remain_assets' => $customer_repo['remain_assets'] + $saledata['qty'] - $saledata['given_crate'],
+                'remain_assets' => $customer_repo['remain_assets'] + $saledata['qty'] - $saledata['given_assets'],
             ]);
         }
         

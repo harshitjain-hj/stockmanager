@@ -16,51 +16,57 @@
                     <?php $repos = json_decode( $repos, true ); ?>
                     <?php $customers = json_decode( $customers, true ); ?>
                     <?php $items = json_decode( $items, true ); ?>
-                    <table class="table table-hover table-sm table-responsive-lg">
-                        <thead>
-                            <tr>
-                                @foreach($repos[0] as $key => $value)
-                                    @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
-
-                                    @elseif ($key == 'customer_id')
-                                        <th scope="col">customer_name</th>
-                                    @elseif ($key == 'item_id')
-                                        <th scope="col">item_name</th>        
-                                    @else
-                                        <th scope="col">{{ $key}}</th>
-                                    @endif  
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($repos as $repo)
+                    @if(!empty($repos))
+                        <table class="table table-hover table-sm table-responsive-lg">
+                            <thead>
                                 <tr>
-                                    @foreach($repo as $key => $value)
+                                    @foreach($repos[0] as $key => $value)
                                         @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
 
                                         @elseif ($key == 'customer_id')
-                                            <?php 
-                                                $key = array_search($value, array_column($customers, 'name'));
-                                                $name = $customers[$key]['name'];
-                                                // dd($name);
-                                            ?>
-                                            <td>{{$name}}</td>
+                                            <th scope="col">customer_name</th>
                                         @elseif ($key == 'item_id')
-                                            <?php 
-                                                $key = array_search($value, array_column($items, 'name'));
-                                                $name = $items[$key]['name'];
-                                                $sku = $items[$key]['sku'];
-                                                // dd($name);
-                                            ?>
-                                            <td>{{$name}}|{{$sku}}</td>
+                                            <th scope="col">item_name</th>        
                                         @else
-                                            <td>{{$value}}</td>
-                                        @endif
+                                            <th scope="col">{{ $key}}</th>
+                                        @endif  
                                     @endforeach
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($repos as $repo)
+                                    <tr>
+                                        @foreach($repo as $key => $value)
+                                            @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
+
+                                            @elseif ($key == 'customer_id')
+                                                <?php 
+                                                    $key = array_search($value, array_column($customers, 'name'));
+                                                    $name = $customers[$key]['name'];
+                                                    // dd($name);
+                                                ?>
+                                                <td>{{$name}}</td>
+                                            @elseif ($key == 'item_id')
+                                                <?php 
+                                                    $key = array_search($value, array_column($items, 'name'));
+                                                    $name = $items[$key]['name'];
+                                                    $sku = $items[$key]['sku'];
+                                                    // dd($name);
+                                                ?>
+                                                <td>{{$name}}|{{$sku}}</td>
+                                            @else
+                                                <td>{{$value}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="alert text-white bg-dark text-center" role="alert">
+                            No bill added since.
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

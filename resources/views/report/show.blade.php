@@ -13,7 +13,7 @@
                         // dd($name);
                     ?>
                     <nav class="nav nav-pills nav-fill lead">
-                        <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$name}}</span></li>
+                        <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$repo['name']}}</span></li>
                         <li class="nav-item nav-link">Item Name: <span class="text-dark font-weight-bold">{{$item_name}}</span></li>
                         <li class="nav-item nav-link">Total Amount: <span class="text-primary font-weight-bold">{{$repo['total_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Amount: <span class="text-danger font-weight-bold">{{$repo['remain_amount']}}</span></li>
@@ -28,7 +28,7 @@
                                 @foreach($sales[0] as $key => $value)
                                     @if($key == 'bill_no')
                                         <th scope="row">{{$key}}</th>
-                                    @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id')
+                                    @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
                                             
                                     @elseif ($key == 'customer_id')
                                         <th scope="col">customer_name</th>
@@ -46,10 +46,10 @@
                                     @foreach($sale as $key => $value)
                                         @if($key == 'bill_no')
                                             <th scope="row">{{$value}}</th>
-                                        @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id')
+                                        @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
 
                                         @elseif ($key == 'customer_id')
-                                            <td>{{$name}}</td>
+                                            <td>{{$sale['name']}}</td>
                                         @elseif ($key == 'item_id')
                                             <?php 
                                                 $key = array_search($value, array_column($items, 'name'));
@@ -57,7 +57,7 @@
                                                 $sku = $items[$key]['sku'];
                                                 // dd($name);
                                             ?>
-                                            <td>{{$name}}|{{$sku}}</td>
+                                            <td>{{$name}} | {{$sku}}</td>
                                         @else
                                             <td>{{$value}}</td>
                                         @endif

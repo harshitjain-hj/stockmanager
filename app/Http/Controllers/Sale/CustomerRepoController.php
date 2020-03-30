@@ -13,6 +13,7 @@ use App\Item;
 use App\Sale;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustomerRepoController extends Controller
 {
@@ -59,14 +60,11 @@ class CustomerRepoController extends Controller
      */
     public function show($id)
     {
-        $customer = Customer::where('id', $id)->select('name')->first();
-        $name = $customer['name'];
-        // dd($name);
+        $sales = DB::table('sales')->where('customer_id', $id)->join('customers', 'sales.customer_id', 'customers.id')->get(array('sales.*', 'customers.name'));
+        // dd($sales);
         $items = Item::select('id', 'name', 'sku')->get();
         $repo = CustomerRepo::where('customer_id', $id)->first();
-        $sales = Sale::where('customer_id', $id)->get();
-        // dd($sales);
-        return view('report.show', compact('repo', 'name', 'items', 'sales'));
+        return view('report.show', compact('repo', 'items', 'sales'));
     }
 
     /**

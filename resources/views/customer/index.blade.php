@@ -3,26 +3,29 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-around">
-                    <div class="row ">
-                        <div class="col"><h1>Customers</h1></div>
-                        <div class="col"><a type="button" class="btn btn-secondary" href="{{ route('customer.create') }}"><span class="material-icons pr-1 " style="vertical-align: -2px;">add_circle</span><span style="vertical-align: 4px;" >ADD</span></a></div>
+                <div class="row card-header d-flex justify-content-around">
+                    <div class="row">
+                        <div class="px-3"><h3 class="pt-1">Customers</h3></div>
+                        <div class="px-3">
+                            <a type="button" class="btn btn-secondary mr-3" href="{{ route('customer.create') }}">ADD</a>
+                            <button type="button" class="btn btn-primary" onclick="exportTableToExcel('customer', 'customer')">Save</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card-body">
                     <?php $customers = json_decode( $customers, true ); ?>
                     @if(!empty($customers))
-                        <table class="table table-hover table-sm table-responsive-lg">
+                        <table class="table table-hover table-sm table-responsive-sm" id="customer">
                             <thead>
                                 <tr>
                                     @foreach($customers[0] as $key => $value)
                                         @if($key == 'created_at' || $key == 'updated_at')
                                                 
                                         @else
-                                            <th scope="col">{{ $key}}</th>
+                                            <th scope="col" class="align-middle">{{ $key}}</th>
                                         @endif
                                     @endforeach
                                 </tr>

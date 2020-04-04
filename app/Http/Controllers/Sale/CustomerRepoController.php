@@ -24,7 +24,7 @@ class CustomerRepoController extends Controller
      */
     public function index()
     {
-        $repos = CustomerRepo::all();
+        $repos = CustomerRepo::orderBy('remain_amount', 'desc')->get();
         // dd($repos);
         $customers = Customer::select('id', 'name')->get();
         $items = Item::select('id', 'name', 'sku')->get();
@@ -60,10 +60,11 @@ class CustomerRepoController extends Controller
      */
     public function show($id)
     {
-        $sales = DB::table('sales')->where('customer_id', $id)->join('customers', 'sales.customer_id', 'customers.id')->get(array('sales.*', 'customers.name'));
+        $sales = DB::table('sales')->where('customer_id', $id)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_date', 'desc')->get(array('sales.*', 'customers.name'));
         // dd($sales);
         $items = Item::select('id', 'name', 'sku')->get();
         $repo = CustomerRepo::where('customer_id', $id)->first();
+        // dd($sales);
         return view('report.show', compact('repo', 'items', 'sales'));
     }
 

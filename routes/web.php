@@ -28,3 +28,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
     // All customer report routes 
     Route::resource('/repo', 'Sale\CustomerRepoController')->middleware('auth');
+
+// Store Routes
+    Route::resource('/store', 'Store\StoreController')->middleware('auth');

@@ -24,7 +24,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = Sale::all();
+        $sales = Sale::orderBy('bill_date', 'desc')->get();
         // dd($sales);
         $customers = Customer::select('id', 'name')->get();
         $items = Item::select('id', 'name', 'sku')->get();

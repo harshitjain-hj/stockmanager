@@ -12,17 +12,15 @@
                     @foreach($stocks as $stock) 
                         <div class="col mb-4">
                             <div class=" text-white bg-danger h-60">
-                                <div class="row no-gutters">
-                                    <div class="col-md-5 p-3 align-middle">
-                                        <h1 class="display-4 text-center">{{$stock['unit_remain']}}</h1>
-                                        <p class="card-text text-center">{{$stock['description']}}</p>
+                                <div class="row no-gutters m-1">
+                                    <div class="col-md-5 p-2 align-middle">
+                                        <h1 class="display-4 text-center mb-0">{{$stock['unit_remain']}}</h1>
+                                        <p class="card-text text-center">{{$stock['sku']}}</p>
                                     </div>
-                                    <div class="col-md-7">
-                                        <div class="card-body text-center">
-                                            <h5 class="card-title">{{$stock['name']}}</h5>
-                                            <p class="card-text">{{$stock['sku']}} | {{$stock['description']}}</p>
+                                    <div class="col-md-7 p-2 card-body text-center">
+                                            <h5>{{$stock['name']}}</h5>
+                                            <p>{{$stock['description']}}</p>
                                             <small class="text-white">Last updated at {{$stock['updated_at']}}</small>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

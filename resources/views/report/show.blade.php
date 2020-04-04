@@ -13,29 +13,28 @@
                         // dd($name);
                     ?>
                     <nav class="nav nav-pills nav-fill lead">
-                        <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$repo['name']}}</span></li>
+                        <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$sales['0']->name}}</span></li>
                         <li class="nav-item nav-link">Item Name: <span class="text-dark font-weight-bold">{{$item_name}}</span></li>
                         <li class="nav-item nav-link">Total Amount: <span class="text-primary font-weight-bold">{{$repo['total_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Amount: <span class="text-danger font-weight-bold">{{$repo['remain_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Assets: <span class="text-danger font-weight-bold">{{$repo['remain_assets']}}</span></li>
+                        <li class="nav-item nav-link"><button type="button" class="btn btn-primary" onclick="exportTableToExcel('{{$sales['0']->name}}', '{{$sales['0']->name}}')">Save</button></li>
 					</nav>
                 </div>
                 <div class="card-body">
-                <table class="table table-hover  table-sm table-responsive-lg">
+                <table class="table table-hover  table-sm table-responsive-md" id="{{$sales['0']->name}}">
                     <?php $sales = json_decode( $sales, true ); ?>
                         <thead>
                             <tr>
                                 @foreach($sales[0] as $key => $value)
-                                    @if($key == 'bill_no')
-                                        <th scope="row">{{$key}}</th>
-                                    @elseif($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
+                                    @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
                                             
                                     @elseif ($key == 'customer_id')
-                                        <th scope="col">customer_name</th>
+                                        <th scope="col" class="align-middle">Customer Name</th>
                                     @elseif ($key == 'item_id')
-                                        <th scope="col">item_name</th>
+                                        <th scope="col" class="align-middle">Item Name</th>
                                     @else
-                                        <th scope="col">{{ $key}}</th>
+                                        <th scope="col" class="align-middle">{{$key}}</th>
                                     @endif  
                                 @endforeach
                             </tr>

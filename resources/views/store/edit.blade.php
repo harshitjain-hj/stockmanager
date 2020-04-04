@@ -3,21 +3,38 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="card">
-                <div class="card-header text-center">Add Customer</div>
+                <div class="card-header">Add withdraw Info</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('customer.store') }}">
+                    <form method="POST" action="{{ route('store.update', $store->id) }}">
                         @csrf
 
+                        @method('PATCH')
+
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                            <label for="withdraw_qty" class="col-md-4 col-form-label text-md-right">Withdraw quantity</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="withdraw_qty" type="text" class="form-control @error('withdraw_qty') is-invalid @enderror" name="withdraw_qty" value="{{ old('withdraw_qty')}}" required autocomplete="withdraw_qty">
 
-                                @error('name')
+                                @error('withdraw_qty')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="floor" class="col-md-4 col-form-label text-md-right">Floor</label>
+
+                            <div class="col-md-6">
+                                <input id="floor" type="text" class="form-control @error('floor') is-invalid @enderror" oninput="this.value = this.value.toUpperCase()" name="floor" value="{{ old('floor') ?? $store->floor}}" autocomplete="floor">
+
+                                @error('floor')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -26,12 +43,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
+                            <label for="block" class="col-md-4 col-form-label text-md-right">Block</label>
 
                             <div class="col-md-6">
-                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" autocomplete="address">
+                                <input id="block" type="text" class="form-control @error('block') is-invalid @enderror" oninput="this.value = this.value.toUpperCase()" name="block" value="{{ old('block') ?? $store->block}}" autocomplete="block">
 
-                                @error('address')
+                                @error('block')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -40,37 +57,23 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="mobileno" class="col-md-4 col-form-label text-md-right">{{ __('Mobile no') }}</label>
+                            <label for="withdraw_date" class="col-md-4 col-form-label text-md-right">Withdraw date</label>
 
                             <div class="col-md-6">
-                                <input id="mobileno" type="tel" class="form-control @error('mobileno') is-invalid @enderror" pattern="[0-9]{10}" name="mobileno" required autocomplete="mobileno">
+                                <input id="withdraw_date" type="date" class="form-control{{ $errors->has('withdraw_date') ? ' is-invalid' : '' }}" name="withdraw_date" value="{{ old('withdraw_date') }}" required autofocus>
 
-                                @error('mobileno')
+                                @if ($errors->has('withdraw_date'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="other" class="col-md-4 col-form-label text-md-right">{{ __('Other no') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="other" type="tel" class="form-control @error('other') is-invalid @enderror" pattern="[0-9]{10}" name="other" autocomplete="other">
-
-                                @error('other')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                @endif
                             </div>
                         </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Add') }}
+                                    {{ __('Update') }}
                                 </button>
                             </div>
                         </div>

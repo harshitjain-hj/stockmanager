@@ -1,41 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
+<?php $repos = json_decode( $repos, true ); ?>
+<?php $customers = json_decode( $customers, true ); ?>
+<?php $items = json_decode( $items, true ); ?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header d-flex justify-content-around">
-                    <div class="row ">
-                        <div class="col text-nowrap"><h2>Customer Summary</h2></div>
-                        <!-- <div class="col"><a type="button" class="btn btn-secondary" href="{{ route('sale.create') }}"><span class="material-icons pr-1 " style="vertical-align: -2px;">add_circle</span><span style="vertical-align: 4px;" >ADD</span></a></div> -->
-                    </div>
+                <div class="card-header justify-content-around row no-gutters">
+                        <div class="col-sm-7 text-center">
+							<h4 class="pt-1">Customer's Report</h4>
+						</div>
+                        <div class="input-group col-sm-5">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon">Customer</span>
+							</div>
+							<select onchange="if (this.value) window.location.href='repo/'+ this.value" class="custom-select">
+									<option selected>Choose customer...</option>
+								@foreach($repos as $repo)
+                                    <?php 
+                                        $key = array_search($repo['customer_id'], array_column($customers, 'id'));
+                                        $name = $customers[$key]['name'];
+                                        // dd($name);
+                                    ?>
+				  					<option value="{{$repo['customer_id']}}">{{$name}}</option>
+			  					@endforeach
+							</select>
+                            <button type="button" class="btn btn-primary ml-2" onclick="exportTableToExcel('report', 'report')">Save</button>
+						</div>
                 </div>
 
                 <div class="card-body">
-                    <?php $repos = json_decode( $repos, true ); ?>
-                    <?php $customers = json_decode( $customers, true ); ?>
-                    <?php $items = json_decode( $items, true ); ?>
                     @if(!empty($repos))
-                        <table class="table table-hover table-sm table-responsive-lg">
+                        <table class="table table-hover table-sm table-responsive-md" id="report">
                             <thead>
                                 <tr>
                                     @foreach($repos[0] as $key => $value)
                                         @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
 
                                         @elseif ($key == 'customer_id')
-                                            <th scope="col">customer_name</th>
+                                            <th scope="col" class="align-middle">Customer Name</th>
                                         @elseif ($key == 'item_id')
-                                            <th scope="col">item_name</th>        
+                                            <th scope="col" class="align-middle">Item Name</th>        
                                         @else
-                                            <th scope="col">{{ $key}}</th>
+                                            <th scope="col" class="align-middle">{{ $key}}</th>
                                         @endif  
                                     @endforeach
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($repos as $repo)
-                                    <tr>
+                                    <tr onclick="window.location='/repo/{{$repo['customer_id']}}'">
                                         @foreach($repo as $key => $value)
                                             @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
 

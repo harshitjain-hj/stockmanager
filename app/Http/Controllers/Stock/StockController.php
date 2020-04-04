@@ -79,7 +79,7 @@ class StockController extends Controller
         
         $lorry_info = new LorryInfo($lorry_info);
         $lorry_info->save();
-        return redirect()->url('/lorryinfo');
+        return redirect('/lorryinfo');
 
     }
 

@@ -14,7 +14,7 @@ class LorryInfoController extends Controller
 {
     public function index()
     {
-        $lorry_infos = DB::table('lorry_infos')->join('items', 'lorry_infos.item_id', 'items.id')->get(array('lorry_infos.*', 'items.name'));
+        $lorry_infos = DB::table('lorry_infos')->join('items', 'lorry_infos.item_id', 'items.id')->orderBy('created_at', 'desc')->get(array('lorry_infos.*', 'items.name'));
         // dd($lorry_infos);
         return view('stock.lorryinfo', compact('lorry_infos'));
     }

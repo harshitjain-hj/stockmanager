@@ -13,7 +13,7 @@ use App\Item;
 use App\Sale;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use DB;
 
 class CustomerRepoController extends Controller
 {
@@ -24,9 +24,11 @@ class CustomerRepoController extends Controller
      */
     public function index()
     {
-        $repos = CustomerRepo::orderBy('remain_amount', 'desc')->get();
+        $repos =  DB::table('customer_repos')->join('customers', 'customer_repos.customer_id', 'customers.id')->orderBy('remain_amount', 'desc')->get(array('customer_repos.*', 'customers.name'));
+
+        // $repos = CustomerRepo::orderBy('remain_amount', 'desc')->get();
         // dd($repos);
-        $customers = Customer::select('id', 'name')->get();
+        $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
         $items = Item::select('id', 'name', 'sku')->get();
         return view('report.index', compact('repos', 'customers', 'items'));
     }
@@ -58,9 +60,20 @@ class CustomerRepoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $sales = DB::table('sales')->where('customer_id', $id)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_date', 'desc')->get(array('sales.*', 'customers.name'));
+
+        $char = '';
+        $char = $request->character;
+        if($char == 'bill') {
+            $number = range(0, 100);
+            $sales =  DB::table('sales')->where('customer_id', $id)->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+        } else {
+            $sales =  DB::table('sales')->where('customer_id', $id)->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+        }
+
+
+        // $sales = DB::table('sales')->where('customer_id', $id)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('id', 'desc')->get(array('sales.*', 'customers.name'));
         // dd($sales);
         $items = Item::select('id', 'name', 'sku')->get();
         $repo = CustomerRepo::where('customer_id', $id)->first();

@@ -19,12 +19,8 @@
 							<select onchange="if (this.value) window.location.href='repo/'+ this.value" class="custom-select">
 									<option selected>Choose customer...</option>
 								@foreach($repos as $repo)
-                                    <?php 
-                                        $key = array_search($repo['customer_id'], array_column($customers, 'id'));
-                                        $name = $customers[$key]['name'];
-                                        // dd($name);
-                                    ?>
-				  					<option value="{{$repo['customer_id']}}">{{$name}}</option>
+                                    {{$repo['name']}}
+				  					<option value="{{$repo['customer_id']}}">{{$repo['name']}}</option>
 			  					@endforeach
 							</select>
                             <button type="button" class="btn btn-primary ml-2" onclick="exportTableToExcel('report', 'report')">Save</button>
@@ -37,7 +33,7 @@
                             <thead>
                                 <tr>
                                     @foreach($repos[0] as $key => $value)
-                                        @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
+                                        @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
 
                                         @elseif ($key == 'customer_id')
                                             <th scope="col" class="align-middle">Customer Name</th>
@@ -53,15 +49,10 @@
                                 @foreach($repos as $repo)
                                     <tr onclick="window.location='/repo/{{$repo['customer_id']}}'">
                                         @foreach($repo as $key => $value)
-                                            @if($key == 'created_at' || $key == 'updated_at' || $key == 'id')
+                                            @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
 
                                             @elseif ($key == 'customer_id')
-                                                <?php 
-                                                    $key = array_search($value, array_column($customers, 'name'));
-                                                    $name = $customers[$key]['name'];
-                                                    // dd($name);
-                                                ?>
-                                                <td>{{$name}}</td>
+                                                <td>{{$repo['name']}}</td>
                                             @elseif ($key == 'item_id')
                                                 <?php 
                                                     $key = array_search($value, array_column($items, 'name'));

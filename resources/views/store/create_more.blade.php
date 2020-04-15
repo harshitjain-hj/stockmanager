@@ -15,7 +15,8 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">Customer Name</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name">
+                                <input name="store_id" type="hidden" value="{{ $store['store_id'] }}">
+                                <input id="name" type="text" readonly class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $store['name'] }}" autocomplete="name">
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -28,7 +29,7 @@
                             <label for="item_name" class="col-md-4 col-form-label text-md-right">Item Name</label>
 
                             <div class="col-md-6">
-                                <input id="item_name" type="text" class="form-control @error('item_name') is-invalid @enderror" name="item_name" value="{{ old('item_name') }}" required autocomplete="item_name">
+                                <input id="item_name" type="text" readonly class="form-control @error('item_name') is-invalid @enderror" name="item_name" value="{{ $store['item_name'] }}" autocomplete="item_name">
                                 @error('item_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -41,7 +42,7 @@
                             <label for="mobile_no" class="col-md-4 col-form-label text-md-right">Mobile no.</label>
 
                             <div class="col-md-6">
-                                <input id="mobile_no" type="text" class="form-control @error('mobile_no') is-invalid @enderror" name="mobile_no" value="{{ old('mobile_no') }}" required autocomplete="mobile_no">
+                                <input id="mobile_no" type="text" class="form-control @error('mobile_no') is-invalid @enderror" name="mobile_no" value="{{ $store['mobile_no'] }}" readonly autocomplete="mobile_no">
 
                                 @error('mobile_no')
                                     <span class="invalid-feedback" role="alert">
@@ -69,7 +70,7 @@
                             <label for="monthly_amount" class="col-md-4 col-form-label text-md-right">Monthly amount</label>
 
                             <div class="col-md-6">
-                                <input id="monthly_amount" type="text" class="form-control @error('monthly_amount') is-invalid @enderror" name="monthly_amount" value="{{ old('monthly_amount') }}" required autocomplete="monthly_amount">
+                                <input id="monthly_amount" type="text" class="form-control @error('monthly_amount') is-invalid @enderror" name="monthly_amount" value="{{ $store['monthly_amount'] }}" required autocomplete="monthly_amount">
 
                                 @error('monthly_amount')
                                     <span class="invalid-feedback" role="alert">

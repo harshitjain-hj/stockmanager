@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header">
                     <?php $items = json_decode( $items, true ); ?>
@@ -21,8 +21,25 @@
                         <li class="nav-item nav-link"><button type="button" class="btn btn-primary" onclick="exportTableToExcel('{{$sales['0']->name}}', '{{$sales['0']->name}}')">Save</button></li>
 					</nav>
                 </div>
-                <div class="card-body">
-                <table class="table table-hover  table-sm table-responsive-md" id="{{$sales['0']->name}}">
+                <div class="pt-1">
+                    <nav aria-label="Page navigation flex-wrap" style="overflow-x: overlay;">
+                        <ul class="pagination justify-content-center m-1 ">
+                            <?php
+                                $character = range('A', "Z");
+                                echo '<ul class="pagination">';
+                                echo '<li class="page-item active"><a class="page-link" style="padding: 5px;" href="?character=bill">Bill</a></li>';
+                                foreach($character as $alphabet)
+                                {
+                                    echo '<li class="page-item"><a class="page-link" style="padding: 5px;" href="?character='.$alphabet.'"><strong>'.$alphabet.'</strong></a></li>';
+                                }
+                                echo '</ul>';
+                            ?>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="card-body pt-1">
+                <table class="table table-hover table-sm table-responsive" id="{{$sales['0']->name}}">
                     <?php $sales = json_decode( $sales, true ); ?>
                         <thead>
                             <tr>

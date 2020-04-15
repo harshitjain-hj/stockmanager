@@ -9,6 +9,6 @@ class WithdrawInfo extends Model
     public $timestamps = false; 
     
     protected $fillable = [
-        'store_id', 'withdraw_qty', 'withdraw_date', 'created_at'
+        'batch_id', 'store_id', 'withdraw_qty', 'withdraw_date', 'lorry_no', 'created_at'
     ];
 }

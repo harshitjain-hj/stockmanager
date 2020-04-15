@@ -15,6 +15,7 @@ class CreateStoresTable extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('store_id')->nullable();
             $table->text('name');
             $table->text('item_name');
             $table->bigInteger('mobile_no')->nullable();
@@ -23,8 +24,10 @@ class CreateStoresTable extends Migration
             $table->text('floor');
             $table->text('block');
             $table->date('storage_date');
+            $table->unsignedInteger('lorry_no')->nullable();
             $table->unsignedInteger('remain_qty');
             $table->date('payable_amount');
+            $table->text('status')->default('Stored');
             $table->text('description')->nullable();
             $table->timestamps();
         });

@@ -8,14 +8,16 @@
                 <div class="card-header">Add Lorry Info</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('store.store') }}">
+                    <form method="POST" action="{{ route('store.withdraw.update') }}">
                         @csrf
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Customer Name</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name">
+                                <input name="batch_id" type="hidden" value="{{ $id }}">
+                                <input name="store_id" type="hidden" value="{{ $store['store_id'] }}">
+                                <input id="name" type="text" readonly class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $store['name'] }}" autocomplete="name">
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -28,7 +30,7 @@
                             <label for="item_name" class="col-md-4 col-form-label text-md-right">Item Name</label>
 
                             <div class="col-md-6">
-                                <input id="item_name" type="text" class="form-control @error('item_name') is-invalid @enderror" name="item_name" value="{{ old('item_name') }}" required autocomplete="item_name">
+                                <input id="item_name" type="text" readonly class="form-control @error('item_name') is-invalid @enderror" name="item_name" value="{{ $store['item_name'] }}" autocomplete="item_name">
                                 @error('item_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -38,26 +40,26 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="mobile_no" class="col-md-4 col-form-label text-md-right">Mobile no.</label>
+                            <label for="remain_qty" class="col-md-4 col-form-label text-md-right">Quantity remain</label>
 
                             <div class="col-md-6">
-                                <input id="mobile_no" type="text" class="form-control @error('mobile_no') is-invalid @enderror" name="mobile_no" value="{{ old('mobile_no') }}" required autocomplete="mobile_no">
+                                <input id="remain_qty" type="text" readonly class="form-control @error('remain_qty') is-invalid @enderror" name="remain_qty" value="{{ $store['remain_qty'] }}" required autocomplete="remain_qty">
 
-                                @error('mobile_no')
+                                @error('remain_qty')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> 
 
                         <div class="form-group row">
-                            <label for="qty" class="col-md-4 col-form-label text-md-right">Quantity</label>
+                            <label for="withdraw_qty" class="col-md-4 col-form-label text-md-right">Withdraw Quantity</label>
 
                             <div class="col-md-6">
-                                <input id="qty" type="text" class="form-control @error('qty') is-invalid @enderror" name="qty" value="{{ old('qty') }}" required autocomplete="qty">
+                                <input id="withdraw_qty" type="text" class="form-control @error('withdraw_qty') is-invalid @enderror" name="withdraw_qty" value="{{ old('withdraw_qty') }}" required autocomplete="withdraw_qty">
 
-                                @error('qty')
+                                @error('withdraw_qty')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -65,47 +67,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="monthly_amount" class="col-md-4 col-form-label text-md-right">Monthly amount</label>
-
-                            <div class="col-md-6">
-                                <input id="monthly_amount" type="text" class="form-control @error('monthly_amount') is-invalid @enderror" name="monthly_amount" value="{{ old('monthly_amount') }}" required autocomplete="monthly_amount">
-
-                                @error('monthly_amount')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="floor" class="col-md-4 col-form-label text-md-right">Floor</label>
-
-                            <div class="col-md-6">
-                                <input id="floor" type="text" class="form-control @error('floor') is-invalid @enderror" oninput="this.value = this.value.toUpperCase()" name="floor" value="{{ old('floor') }}" required autocomplete="floor">
-
-                                @error('floor')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="block" class="col-md-4 col-form-label text-md-right">Block</label>
-
-                            <div class="col-md-6">
-                                <input id="block" type="text" class="form-control @error('block') is-invalid @enderror" oninput="this.value = this.value.toUpperCase()" name="block" value="{{ old('block') }}" required autocomplete="block">
-
-                                @error('block')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
 
                         <div class="form-group row">
                             <label for="lorry_no" class="col-md-4 col-form-label text-md-right">{{ __('Lorry no') }}</label>
@@ -122,12 +83,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="storage_date" class="col-md-4 col-form-label text-md-right">Storage date</label>
+                            <label for="withdraw_date" class="col-md-4 col-form-label text-md-right">Withdraw date</label>
 
                             <div class="col-md-6">
-                                <input id="storage_date" type="date" class="form-control{{ $errors->has('storage_date') ? ' is-invalid' : '' }}" name="storage_date" value="<?php echo date("Y-m-d");?>" required autofocus>
+                                <input id="withdraw_date" type="date" class="form-control{{ $errors->has('withdraw_date') ? ' is-invalid' : '' }}" name="withdraw_date" value="<?php echo date("Y-m-d");?>" required autofocus>
 
-                                @if ($errors->has('storage_date'))
+                                @if ($errors->has('withdraw_date'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -152,7 +113,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Add to Store') }}
+                                    {{ __('Withdraw') }}
                                 </button>
                             </div>
                         </div>

@@ -15,9 +15,11 @@ class CreateWithdrawInfosTable extends Migration
     {
         Schema::create('withdraw_infos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('batch_id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedInteger('withdraw_qty');
             $table->date('withdraw_date');
+            $table->unsignedInteger('lorry_no')->nullable();
             $table->timestamp('created_at');
         });
     }

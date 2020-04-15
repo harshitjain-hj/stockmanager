@@ -31,3 +31,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Store Routes
     Route::resource('/store', 'Store\StoreController')->middleware('auth');
+
+    Route::get('/store/create_more/{store_id}', 'Store\StoreController@create_more')->name('store.create_more')->middleware('auth');
+
+    Route::get('/store/withdraw/{id}', 'Store\StoreController@withdraw')->name('store.withdraw')->middleware('auth');
+
+    Route::post('/store/withdraw/update', 'Store\StoreController@withdraw_update')->name('store.withdraw.update')->middleware('auth');

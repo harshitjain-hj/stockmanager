@@ -24,9 +24,9 @@ class CreateStoresTable extends Migration
             $table->text('floor');
             $table->text('block');
             $table->date('storage_date');
-            $table->unsignedInteger('lorry_no')->nullable();
+            $table->text('lorry_no')->nullable();
             $table->unsignedInteger('remain_qty');
-            $table->date('payable_amount');
+            $table->unsignedBigInteger('payable_amount');
             $table->text('status')->default('Stored');
             $table->text('description')->nullable();
             $table->timestamps();

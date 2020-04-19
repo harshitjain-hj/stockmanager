@@ -14,7 +14,7 @@ class StoreController extends Controller
     public function index()
     {
         $stores = Store::selectRaw('store_id, name, item_name, sum(remain_qty) as remain_qty')
-                        ->groupBy('store_id')
+                        ->groupBy('store_id', 'name', 'item_name')
                         ->get();
         // dd($stores);
         return view('store.index', compact('stores'));
@@ -36,7 +36,7 @@ class StoreController extends Controller
         // dd(str_replace(url('/'), '', url()->previous()));
         // dd($request->all());
         $store_info = request()->validate([
-            "store_id" => "required|numeric",
+            "store_id" => "nullable|numeric",
             "name" => "required|string",
             "item_name" => "required|string",
             "mobile_no" => "required|regex:/[0-9]{10}/",
@@ -44,7 +44,7 @@ class StoreController extends Controller
             "monthly_amount" => "required|numeric",
             "floor" => "required|alpha",
             "block" => "required|string",
-            "lorry_no" => "string|nullable",
+            "lorry_no" => "string|nullable|regex:/^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/",
             "storage_date" => "required|date",
             "description" => "string|nullable"
         ]);
@@ -63,10 +63,12 @@ class StoreController extends Controller
     public function show($id)
     {
         $store = Store::selectRaw('store_id, name, item_name, mobile_no, sum(qty) as stored_qty, sum(remain_qty) as remain_qty')
-                        ->where('store_id', $id)->first();
+                        ->where('store_id', $id)
+                        ->groupBy('store_id', 'name', 'item_name', 'mobile_no')
+                        ->first();
 
         // dd($store);
-        $store_info = Store::select('id', 'qty', 'monthly_amount', 'floor', 'block', 'storeage_date', 'lorry_no', 'remain_qty', 'payable_amount', 'status', 'description', 'updated_at')
+        $store_info = Store::select('id', 'qty', 'monthly_amount', 'floor', 'block', 'storage_date', 'lorry_no', 'remain_qty', 'payable_amount', 'status', 'description', 'updated_at')
                             ->where('store_id', $id)->get();
         // dd($store_info);
         $withdraw_infos = WithdrawInfo::where('withdraw_infos.store_id', $id)
@@ -89,7 +91,7 @@ class StoreController extends Controller
             "batch_id" => "required|numeric",
             "store_id" => "required|numeric",
             "withdraw_qty" => "required|numeric|lte:remain_qty",
-            "lorry_no" => "string|nullable",
+            "lorry_no" => "string|nullable|regex:/^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/",
             "withdraw_date" => "required|date",
         ]);
         $withdraw_info['created_at'] = date('Y-m-d');

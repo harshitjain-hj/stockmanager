@@ -19,7 +19,7 @@ class CreateWithdrawInfosTable extends Migration
             $table->unsignedBigInteger('store_id');
             $table->unsignedInteger('withdraw_qty');
             $table->date('withdraw_date');
-            $table->unsignedInteger('lorry_no')->nullable();
+            $table->text('lorry_no')->nullable();
             $table->timestamp('created_at');
         });
     }

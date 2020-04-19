@@ -23,9 +23,9 @@ class HomeController extends Controller
                     ->get();
         foreach($items as $item) {
             $sales = Sale::selectRaw('item_id, bill_date, sum(qty) as total_qty, sum(total_amount) as total_amount')
-                    ->where('bill_date', '>=',date('Y-m-d',strtotime("-20 days")))
+                    ->where('bill_date', '>=', date('Y-m-d',strtotime("-20 days")))
                     ->where('item_id', $item['item_id'])
-                    ->groupBy('bill_date')
+                    ->groupBy('bill_date', 'name')
                     // ->orderBy('bill_date', 'desc')
                     ->get();
 

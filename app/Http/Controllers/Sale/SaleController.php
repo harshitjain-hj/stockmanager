@@ -27,17 +27,31 @@ class SaleController extends Controller
     public function index(Request $request)
     {
         $char = '';
+        $sales = '';
         $char = $request->character;
-        if($char == 'bill') {
-            // $char = 'A';
-            $number = range(0,100);
-            // dd($number);
-            // $sales =  DB::table('sales')->where('bill_no', 'not like', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
-            $sales =  DB::table('sales')->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
-        } else {
-            $sales =  DB::table('sales')->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+        if(DB::table('sales')->count()) {
+            if($char == 'bill') {
+                // $char = 'A';
+                $number = range(0,200);
+                // dd($number);
+                $sales =  DB::table('sales')->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+            } elseif ($request->path() == 'sale' && empty($char)) {
+                $sales = DB::table('sales')
+                        ->join('customers', 'sales.customer_id', 'customers.id')
+                        ->orderBy('bill_no', 'desc')
+                        ->where('bill_date', '>=', date('Y-m-d',strtotime("-2 days")))
+                        ->get(array('sales.*', 'customers.name'));
+            // dd($sales);
+            } 
+            else {
+                $sales = DB::table('sales')->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')
+                //->orderByRaw('LENGTH(bill_no) desc')
+                ->orderBy('bill_date', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->get(array('sales.*', 'customers.name'));
+                // dd($sales);
+            }
         }
-        // dd($sales);
         $items = Item::select('id', 'name', 'sku')->get();
         // dd($customers);
         return view('sale.index', compact('sales', 'items'));
@@ -51,8 +65,11 @@ class SaleController extends Controller
     public function create()
     {
         $id = Sale::select('bill_no')->latest()->first();
-        $bill_no = preg_replace("/[^A-Za-z ]/", '', $id['bill_no']) . (preg_replace("/[^0-9 ]/", '', $id['bill_no'])+1);
-        // dd(bill_no);
+        $bill_no = "Bill No";
+        if(!empty($id)){
+            $bill_no = preg_replace("/[^A-Za-z ]/", '', $id['bill_no']) . (preg_replace("/[^0-9 ]/", '', $id['bill_no'])+1);
+        // dd($bill_no);
+        }
         $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
         $items = Item::select('id', 'name')->get();
         return view('sale.create', compact('bill_no', 'customers', 'items'));

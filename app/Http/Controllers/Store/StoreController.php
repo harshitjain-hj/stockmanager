@@ -13,11 +13,18 @@ class StoreController extends Controller
 {
     public function index()
     {
-        $stores = Store::selectRaw('store_id, name, item_name, sum(remain_qty) as remain_qty')
+        $names = Store::selectRaw('store_id, name, item_name, floor, block, sum(remain_qty) as remain_qty, updated_at')
                         ->groupBy('store_id', 'name', 'item_name')
-                        ->get();
-        // dd($stores);
-        return view('store.index', compact('stores'));
+                        ->orderBy('name', 'ASC')
+                        ->get()->groupBy('name');
+        // dd($names);
+
+        $table = Store::select('store_id', 'name', 'item_name', 'floor', 'block', 'qty as stored_qty', 'remain_qty', 'storage_date')
+            ->where('remain_qty', '!=', 0)
+            ->orderBy('floor', 'ASC')->orderBy('block', 'ASC')
+            ->get();
+        // dd($table);
+        return view('store.index', compact('names', 'table'));
     }
 
     public function create()
@@ -62,7 +69,7 @@ class StoreController extends Controller
 
     public function show($id)
     {
-        $store = Store::selectRaw('store_id, name, item_name, mobile_no, sum(qty) as stored_qty, sum(remain_qty) as remain_qty')
+        $store = Store::selectRaw('store_id, name, item_name, mobile_no, sum(qty) as stored_qty, sum(remain_qty) as remain_qty, status')
                         ->where('store_id', $id)
                         ->groupBy('store_id', 'name', 'item_name', 'mobile_no')
                         ->first();

@@ -54,7 +54,7 @@
                             </thead>
                             <tbody>
                                 @foreach($sales as $sale)
-                                    <tr>
+                                    <tr class="<?php echo ($sale['amount'] == 0 && $sale['qty'] != 0) ? 'table-danger' : '' ?>">
                                         @foreach($sale as $key => $value)
                                             @if($key == 'bill_no')
                                                 <th scope="row">{{$value}}</th>
@@ -64,7 +64,7 @@
                                                 <td>{{$sale['name']}}</td>
                                             @elseif ($key == 'item_id')
                                                 <?php 
-                                                    $key = array_search($value, array_column($items, 'name'));
+                                                    $key = array_search($value, array_column($items, 'id'));
                                                     $name = $items[$key]['name'];
                                                     $sku = $items[$key]['sku'];
                                                     // dd($name);

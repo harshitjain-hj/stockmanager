@@ -40,6 +40,7 @@
                                         <th scope="col">Remain qty</th>
                                         <th scope="col" class="align-middle">Location</th>
                                         <th scope="col">Payable Amount</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -49,7 +50,8 @@
                                             <!-- <th scope="row">1</th> -->
                                             <td>{{$info['remain_qty']}}</td>
                                             <td>{{$info['floor']}} | {{$info['block']}}</td>
-                                            <td>{{$info['payable_amount']}}</td>
+                                            <td>&#8377;{{$info['payable_amount']}}</td>
+                                            <td><a href="#" class="text-decoration-none">{{$info['status']}}</a></td>
                                             <td>
                                                 <span class="badge badge-pill badge-secondary" data-toggle="collapse" data-target="#row_{{$info['id']}}" aria-expanded="false" aria-controls="row_{{$info['id']}}">
                                                     &#709
@@ -78,7 +80,6 @@
                 </div>
                 <div class="col-sm-5">
                     <div class="row justify-content-center pb-4">
-                        <!-- <a type="button" href="{{ route('store.withdraw', $store->store_id) }}" class="btn text-light btn-outline-light mx-2"><strong>- Withdraw</strong></a> -->
                         <select onchange="if (this.value) window.location.href='withdraw/'+ this.value" class="custom-select" style="width: auto;">
                                 <option selected >Withdraw</option>
                             @foreach($store_info as $info)
@@ -90,7 +91,7 @@
                     
                     <?php $withdraw_infos = json_decode( $withdraw_infos, true ); ?>
                     @if(!empty($withdraw_infos))
-                        <table class="table-borderless text-center bg-white bg-white table-responsive table-sm" style="border-radius: 5px;" id="withdraw">
+                        <table class="table-borderless text-center bg-white bg-white table-responsive-md table-sm" style="border-radius: 5px;" id="withdraw">
                             <thead>
                                 <tr>
                                     @foreach($withdraw_infos[0] as $key => $value)

@@ -10,15 +10,15 @@
                     <?php 
                         $key = array_search($repo['item_id'], array_column($items, 'id'));
                         $item_name = $items[$key]['name'];
-                        // dd($name);
+                        // dd($repo['item_id']);
                     ?>
                     <nav class="nav nav-pills nav-fill lead">
-                        <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$sales['0']->name}}</span></li>
+                        <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$repo['name']}}</span></li>
                         <li class="nav-item nav-link">Item Name: <span class="text-dark font-weight-bold">{{$item_name}}</span></li>
                         <li class="nav-item nav-link">Total Amount: <span class="text-primary font-weight-bold">{{$repo['total_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Amount: <span class="text-danger font-weight-bold">{{$repo['remain_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Assets: <span class="text-danger font-weight-bold">{{$repo['remain_assets']}}</span></li>
-                        <li class="nav-item nav-link"><button type="button" class="btn btn-primary" onclick="exportTableToExcel('{{$sales['0']->name}}', '{{$sales['0']->name}}')">Save</button></li>
+                        <li class="nav-item nav-link"><button type="button" class="btn btn-primary" onclick="exportTableToExcel('{{$repo['name']}}', '{{$repo['name']}}')">Save</button></li>
 					</nav>
                 </div>
                 <div class="pt-1">
@@ -39,8 +39,9 @@
                 </div>
 
                 <div class="card-body pt-1">
-                <table class="table table-hover table-sm table-responsive" id="{{$sales['0']->name}}">
-                    <?php $sales = json_decode( $sales, true ); ?>
+                <?php $sales = json_decode( $sales, true ); ?>
+                @if(!empty($sales))
+                    <table class="table table-hover table-sm table-responsive" id="{{$repo['name']}}">
                         <thead>
                             <tr>
                                 @foreach($sales[0] as $key => $value)
@@ -68,7 +69,7 @@
                                             <td>{{$sale['name']}}</td>
                                         @elseif ($key == 'item_id')
                                             <?php 
-                                                $key = array_search($value, array_column($items, 'name'));
+                                                $key = array_search($value, array_column($items, 'id'));
                                                 $name = $items[$key]['name'];
                                                 $sku = $items[$key]['sku'];
                                                 // dd($name);
@@ -82,6 +83,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @else
+                        <div class="alert text-white bg-dark text-center" role="alert">
+                            Currently no sale.
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

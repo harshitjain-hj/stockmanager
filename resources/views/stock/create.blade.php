@@ -8,7 +8,7 @@
                 <div class="card-header">Add Lorry Info</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('stock.store') }}">
+                    <form method="POST" action="{{ route('stock.store') }}" onsubmit="stock.disabled = true; return true;">
                         @csrf
 
                         <div class="form-group row">
@@ -137,7 +137,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" name="stock" class="btn btn-primary">
                                     {{ __('Add Stock') }}
                                 </button>
                             </div>

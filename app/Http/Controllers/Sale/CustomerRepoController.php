@@ -66,18 +66,18 @@ class CustomerRepoController extends Controller
         $char = '';
         $char = $request->character;
         if($char == 'bill') {
-            $number = range(0, 100);
+            $number = range(0, 400);
             $sales =  DB::table('sales')->where('customer_id', $id)->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
         } else {
             $sales =  DB::table('sales')->where('customer_id', $id)->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
         }
 
-
         // $sales = DB::table('sales')->where('customer_id', $id)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('id', 'desc')->get(array('sales.*', 'customers.name'));
         // dd($sales);
         $items = Item::select('id', 'name', 'sku')->get();
-        $repo = CustomerRepo::where('customer_id', $id)->first();
+        $repo = CustomerRepo::where('customer_id', $id)->join('customers', 'customer_repos.customer_id', 'customers.id')->first();
         // dd($sales);
+        // dd($repo);
         return view('report.show', compact('repo', 'items', 'sales'));
     }
 

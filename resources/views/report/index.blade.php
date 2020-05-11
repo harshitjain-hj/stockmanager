@@ -55,7 +55,7 @@
                                                 <td>{{$repo['name']}}</td>
                                             @elseif ($key == 'item_id')
                                                 <?php 
-                                                    $key = array_search($value, array_column($items, 'name'));
+                                                    $key = array_search($value, array_column($items, 'id'));
                                                     $name = $items[$key]['name'];
                                                     $sku = $items[$key]['sku'];
                                                     // dd($name);

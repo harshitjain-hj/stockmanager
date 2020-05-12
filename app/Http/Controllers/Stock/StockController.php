@@ -48,6 +48,7 @@ class StockController extends Controller
     {
         $lorry_info = request()->validate([
             'item_id' => 'required|numeric|unique:items',
+            'created_at' => 'required|date',
             'total_weight' => 'required|numeric',
             'arrived_unit' => 'required|numeric',
             'created_unit' => 'nullable|numeric',

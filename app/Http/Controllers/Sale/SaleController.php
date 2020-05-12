@@ -64,7 +64,8 @@ class SaleController extends Controller
      */
     public function create()
     {
-        $id = Sale::select('bill_no')->latest()->first();
+        $number = range(0, 800);
+        $id = Sale::select('bill_no')->whereNotIn('bill_no', $number)->latest()->first();
         $bill_no = "Bill No";
         if(!empty($id)){
             $bill_no = preg_replace("/[^A-Za-z ]/", '', $id['bill_no']) . (preg_replace("/[^0-9 ]/", '', $id['bill_no'])+1);
@@ -73,6 +74,19 @@ class SaleController extends Controller
         $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
         $items = Item::select('id', 'name')->get();
         return view('sale.create', compact('bill_no', 'customers', 'items'));
+    }
+    public function receive()
+    {   
+        $number = range(0, 800);
+        $id = Sale::select('bill_no')->whereIn('bill_no', $number)->orderBy('bill_no', 'desc')->first();
+        $bill_no = "Bill No";
+        if(!empty($id)){
+            $bill_no = preg_replace("/[^A-Za-z ]/", '', $id['bill_no']) . (preg_replace("/[^0-9 ]/", '', $id['bill_no'])+1);
+        // dd($bill_no);
+        }
+        $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
+        $items = Item::select('id', 'name')->get();
+        return view('sale.receive', compact('bill_no', 'customers', 'items'));
     }
 
     /**
@@ -229,6 +243,25 @@ class SaleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $del_sale = Sale::findOrFail($id);
+
+        // modify stock
+        $stock = Stock::where(['item_id'=> $del_sale['item_id']])->select('unit_remain', 'updated_at')->first();
+        Stock::where(['item_id'=> $del_sale['item_id']])->update([
+            'unit_remain' => $stock['unit_remain'] + $del_sale['qty'],
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        // modify customer repo
+        $customer_repo = CustomerRepo::where(['customer_id'=> $del_sale->customer_id, 'item_id' => $del_sale->item_id])->select('total_amount', 'remain_amount', 'remain_assets')->first();
+        CustomerRepo::where(['customer_id'=> $del_sale->customer_id, 'item_id' => $del_sale->item_id])->update([
+            'total_amount' => $customer_repo['total_amount'] - $del_sale->total_amount,
+            'remain_amount' => $customer_repo['remain_amount'] - $del_sale->total_amount + $del_sale->given_amount,
+            'remain_assets' => $customer_repo['remain_assets'] - $del_sale->qty + $del_sale->given_assets,
+        ]);
+
+        //delete sale
+        $del_sale->delete();
+        return redirect('sale')->with('success', 'Deleted successfully!');
     }
 }

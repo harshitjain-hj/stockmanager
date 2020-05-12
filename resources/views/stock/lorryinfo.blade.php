@@ -8,15 +8,15 @@
                 <div class="card-header d-flex justify-content-around">
                     <div class="row">
                         <div class="px-3"><h4 class="text-nowrap pt-1">Lorry Infos</h4></div>
-                        <div class="px-3"><a type="button" class="btn btn-secondary mr-3" href="{{ route('stock.create') }}">ADD</a><button type="button" class="btn btn-primary" onclick="exportTableToExcel('lorru_infos', 'lorru_infos')">Save</button></div>
+                        <div class="px-3"><a type="button" class="btn btn-secondary mr-3" href="{{ route('stock.create') }}">ADD</a><button type="button" class="btn btn-primary" onclick="exportTableToExcel('lorry_infos', 'lorry_infos')">Save</button></div>
                     </div>
                 </div>
 
                 <div class="card-body">
                     <?php $lorry_infos = json_decode( $lorry_infos, true ); ?>
                     @if(!empty($lorry_infos))
-                        <table class="table table-hover table-sm table-responsive-md" id="lorru_infos">
-                            <thead>
+                        <table class="table table-hover table-sm table-responsive-md" id="lorry_infos">
+                            <thead style="text-transform:capitalize;">
                                 <tr>
                                     @foreach($lorry_infos[0] as $key => $value)
                                         @if($key == 'id' || $key == 'name' || $key == 'updated_at')

@@ -1,9 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
+<?php if (isset($_GET['character'])) {
+    $path = $_GET['character'];
+} else {
+    $path = 'casual';
+}?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
+            @if(\Session::has('success'))
+                <div class="alert alert-dismissible alert-success col-md-8 mb-1 p-2" style="margin: auto;" role="alert">
+                {{\Session::get('success')}}
+                    <button type="button" class="close p-2" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             <div class="card">
                 <div class="card-header">
                     <?php $items = json_decode( $items, true ); ?>
@@ -18,22 +31,89 @@
                         <li class="nav-item nav-link">Total Amount: <span class="text-primary font-weight-bold">{{$repo['total_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Amount: <span class="text-danger font-weight-bold">{{$repo['remain_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Assets: <span class="text-danger font-weight-bold">{{$repo['remain_assets']}}</span></li>
+                        <li class="nav-item nav-link">
+                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#repo_{{$repo['id']}}">Hard Modify</button>
+                        </li>
                         <li class="nav-item nav-link"><button type="button" class="btn btn-primary" onclick="exportTableToExcel('{{$repo['name']}}', '{{$repo['name']}}')">Save</button></li>
 					</nav>
+                    <!-- Modal -->
+                        <div class="modal fade" id="repo_{{$repo['id']}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalCenterTitle">Sure you want to Modify?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="POST" action="{{ route('repo.update', $repo['id']) }}">
+                                        {{ method_field('PATCH') }}
+                                        @csrf
+                                        <div class="modal-body">
+                                            <div class="form-row justify-content-center">
+                                                <div class="form-group col-3">
+                                                    <label for="remain_amount" class="col-form-label text-md-right">Remain Amount</label>
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <input type="text" class="form-control" value="{{ $repo['remain_amount'] }}" disabled>                                                
+                                                </div>
+                                                <div class="form-group col-1 px-0">
+                                                    <img src="{{ URL::asset('images/arrow-right.png')}}" alt="Delete" style="height: 30px; width: 30px; display: block; margin: auto;"> 
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <input id="remain_amount" type="text" class="form-control @error('remain_amount') is-invalid @enderror" name="remain_amount" value="{{ $repo['remain_amount'] }}" required autocomplete="remain_amount">
+
+                                                    @error('remain_amount')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row justify-content-center">
+                                                <div class="form-group col-3">
+                                                    <label for="remain_assets" class="col-form-label text-md-right">Remain Assets</label>
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <input type="text" class="form-control" value="{{ $repo['remain_assets'] }}" disabled>                                                
+                                                </div>
+                                                <div class="form-group col-1 px-0">
+                                                    <img src="{{ URL::asset('images/arrow-right.png')}}" alt="Delete" style="height: 30px; width: 30px; display: block; margin: auto;">                           
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <input id="remain_assets" type="text" class="form-control @error('remain_assets') is-invalid @enderror" name="remain_assets" value="{{ $repo['remain_assets'] }}" required autocomplete="remain_assets">
+
+                                                    @error('remain_assets')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to Edit?')">Modify</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>        
+
                 </div>
                 <div class="pt-1">
                     <nav aria-label="Page navigation flex-wrap" style="overflow-x: overlay;">
                         <ul class="pagination justify-content-center m-1 ">
-                            <?php
-                                $character = range('A', "Z");
-                                echo '<ul class="pagination">';
-                                echo '<li class="page-item active"><a class="page-link" style="padding: 5px;" href="?character=bill">Bill</a></li>';
-                                foreach($character as $alphabet)
-                                {
-                                    echo '<li class="page-item"><a class="page-link" style="padding: 5px;" href="?character='.$alphabet.'"><strong>'.$alphabet.'</strong></a></li>';
-                                }
-                                echo '</ul>';
-                            ?>
+                            <?php $character = range('A', "Z"); ?>
+                            <ul class="pagination">
+                                <li class="page-item {{isset($_GET['character']) ? '' : 'active'}}"><a class="page-link" style="padding: 5px;" href="{{$repo['id']}}">Unpaid</a></li>
+                                <li class="page-item {{$path == 'bill' ? 'active' : ''}}"><a class="page-link" style="padding: 5px;" href="?character=bill">Bill</a></li>
+                                @foreach($character as $alphabet)
+                                    <li class="page-item {{$path == $alphabet ? 'active' : ''}}"><a class="page-link" style="padding: 5px;" href="?character={{$alphabet}}"><strong>{{$alphabet}}</strong></a></li>
+                                @endforeach
+                            </ul>
                         </ul>
                     </nav>
                 </div>
@@ -43,7 +123,7 @@
                 @if(!empty($sales))
                     <table class="table table-hover table-sm table-responsive" id="{{$repo['name']}}">
                         <thead>
-                            <tr>
+                            <tr style="text-transform:capitalize;">
                                 @foreach($sales[0] as $key => $value)
                                     @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
                                             
@@ -55,6 +135,8 @@
                                         <th scope="col" class="align-middle">{{$key}}</th>
                                     @endif  
                                 @endforeach
+                                <th scope="col" class="align-middle">Edit</th>
+                                <th scope="col" class="align-middle">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,7 +161,9 @@
                                             <td>{{$value}}</td>
                                         @endif
                                     @endforeach
-                                </tr>
+                                <td><a href="{{ route('sale.edit', $sale['id']) }}" onclick="return confirm('Are you sure you want to Edit in {{$sale['name']}} bill no. {{$sale['bill_no']}}?')"><img src="{{ URL::asset('images/edit.png')}}" alt="Delete" style="height: 22px; width: 22px; display: block; margin: auto;"></a></td>
+                                <td><a data-toggle="modal" data-target="#bill_{{$sale['id']}}"><img src="{{ URL::asset('images/delete.png')}}" alt="Delete" style="height: 22px; width: 22px; display: block; margin: auto;"></a></td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

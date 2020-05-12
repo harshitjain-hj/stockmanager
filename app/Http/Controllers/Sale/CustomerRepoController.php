@@ -17,99 +17,90 @@ use DB;
 
 class CustomerRepoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $repos =  DB::table('customer_repos')->join('customers', 'customer_repos.customer_id', 'customers.id')->orderBy('remain_amount', 'desc')->get(array('customer_repos.*', 'customers.name'));
+        $item_id = '';
+        $item_id = $request->item;
+        if(!empty($item_id)) {
+            $repos =  DB::table('customer_repos')->where('item_id', $item_id)->join('customers', 'customer_repos.customer_id', 'customers.id')->orderBy('remain_amount', 'desc')->get(array('customer_repos.*', 'customers.name'));
+        }
+        else{
+            $repos =  DB::table('customer_repos')->join('customers', 'customer_repos.customer_id', 'customers.id')->orderBy('remain_amount', 'desc')->get(array('customer_repos.*', 'customers.name'));
+        }
 
-        // $repos = CustomerRepo::orderBy('remain_amount', 'desc')->get();
-        // dd($repos);
         $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
         $items = Item::select('id', 'name', 'sku')->get();
         return view('report.index', compact('repos', 'customers', 'items'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id, Request $request)
     {
-
+        $items = Item::select('id', 'name', 'sku')->get();
+        $repo = CustomerRepo::where('customer_repos.id', $id)->join('customers', 'customer_repos.customer_id', 'customers.id')->first(array('customer_repos.*', 'customers.name'));
+        // dd($repo);
         $char = '';
         $char = $request->character;
         if($char == 'bill') {
             $number = range(0, 400);
-            $sales =  DB::table('sales')->where('customer_id', $id)->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+            $sales =  DB::table('sales')->where('customer_id', $repo->customer_id)->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+        } elseif (!empty($char)) {
+            $sales =  DB::table('sales')->where('customer_id', $repo->customer_id)->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
         } else {
-            $sales =  DB::table('sales')->where('customer_id', $id)->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderByRaw('LENGTH(bill_no) desc')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+            // variables
+            $number = range(0, 800);
+            $amount = 0;
+            $pending = [];
+            $sales = DB::table('sales')->where('customer_id', $repo->customer_id)
+                ->whereNotIn('bill_no', $number)
+                ->join('customers', 'sales.customer_id', 'customers.id')
+                ->orderBy('bill_date', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->get(array('sales.*', 'customers.name'));
+                foreach($sales as $sale) {
+                    if ($amount < $repo->remain_amount) {
+                        $amount = $amount + $sale->total_amount;
+                        array_push($pending, $sale);
+                    } else {
+                        break;
+                    }
+                }
+                $sales = json_encode($pending);
+            // dd($pending);
         }
 
-        // $sales = DB::table('sales')->where('customer_id', $id)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('id', 'desc')->get(array('sales.*', 'customers.name'));
-        // dd($sales);
-        $items = Item::select('id', 'name', 'sku')->get();
-        $repo = CustomerRepo::where('customer_id', $id)->join('customers', 'customer_repos.customer_id', 'customers.id')->first();
-        // dd($sales);
-        // dd($repo);
+        
         return view('report.show', compact('repo', 'items', 'sales'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $repo = request()->validate([
+            'remain_amount' => 'required|numeric',
+            'remain_assets' => 'required|numeric',
+        ]);   
+        // dd(CustomerRepo::where('id', $id)->first());
+        CustomerRepo::where('id', $id)->update([
+            'remain_amount' => $repo['remain_amount'],
+            'remain_assets' => $repo['remain_assets'],
+        ]);
+        return redirect()->route('repo.show', $id)->with('success', 'Updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

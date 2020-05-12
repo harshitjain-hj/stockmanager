@@ -4,6 +4,14 @@
 <?php $repos = json_decode( $repos, true ); ?>
 <?php $customers = json_decode( $customers, true ); ?>
 <?php $items = json_decode( $items, true ); ?>
+<!-- Variables -->
+<?php
+    $total_amount = 0;
+    $remain_amount = 0;
+	$remain_assets = 0;
+
+?>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -20,14 +28,21 @@
 									<option selected>Choose customer...</option>
 								@foreach($repos as $repo)
                                     {{$repo['name']}}
-				  					<option value="{{$repo['customer_id']}}">{{$repo['name']}}</option>
+				  					<option value="{{$repo['id']}}">{{$repo['name']}}</option>
 			  					@endforeach
 							</select>
                             <button type="button" class="btn btn-primary ml-2" onclick="exportTableToExcel('report', 'report')">Save</button>
 						</div>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body pt-0">
+                <ul class="nav justify-content-center">
+                    @foreach($items as $item)
+                        <li class="nav-item">
+                            <a class="nav-link active" href="repo?item={{$item['id']}}">{{$item['name']}}</a>
+                        </li>
+                    @endforeach
+                </ul>
                     @if(!empty($repos))
                         <table class="table table-hover table-sm table-responsive-md" id="report">
                             <thead>
@@ -47,7 +62,7 @@
                             </thead>
                             <tbody>
                                 @foreach($repos as $repo)
-                                    <tr onclick="window.location='/repo/{{$repo['customer_id']}}'">
+                                    <tr onclick="window.location='/repo/{{$repo['id']}}'">
                                         @foreach($repo as $key => $value)
                                             @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
 
@@ -60,13 +75,21 @@
                                                     $sku = $items[$key]['sku'];
                                                     // dd($name);
                                                 ?>
-                                                <td>{{$name}}|{{$sku}}</td>
+                                                <td>{{$name}} | {{$sku}}</td>
                                             @else
                                                 <td>{{$value}}</td>
                                             @endif
                                         @endforeach
+                                        <?php if($repo['remain_amount'] >= 0 ) $remain_amount = $remain_amount + $repo['remain_amount']; ?>
+                                        <?php if($repo['remain_assets'] >= 0 ) $remain_assets = $remain_assets + $repo['remain_assets']; ?>
                                     </tr>
                                 @endforeach
+                                <tr class="table-dark text-body">
+                                    <td>&nbsp</td>
+                                    <td colspan=2 class="text-center">Total</td>
+                                    <td>{{$remain_amount}}</td>
+                                    <td>{{$remain_assets}}</td>
+                                </tr>
                             </tbody>
                         </table>
                     @else

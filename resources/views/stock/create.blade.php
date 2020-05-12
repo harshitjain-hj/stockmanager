@@ -15,12 +15,26 @@
 						   <label for="item_id" class="col-md-4 col-form-label text-md-right">Item name</label>
 						   <div class="col-md-6">
 							   <select class="form-control" id="item_id" name="item_id" value="{{ old('item_id') }}">
-								   <option selected>Choose category...</option>
+								   <option selected>Choose item...</option>
 									@foreach ($items as $item)
 		 								<option name="item_id" value="{{ $item['id'] }}">{{ $item['name'] }}</option>
 		 							@endforeach
 							   </select>
 						   </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="created_at" class="col-md-4 col-form-label text-md-right">Date</label>
+
+                            <div class="col-md-6">
+                                <input id="created_at" type="date" class="form-control{{ $errors->has('created_at') ? ' is-invalid' : '' }}" name="created_at" value="<?php echo date("Y-m-d");?>" required>
+
+                                @if ($errors->has('created_at'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @endif
+                            </div>
                         </div>
 
                         <div class="form-group row">

@@ -24,6 +24,8 @@ Route::get('/home', 'HomeController@index')->name('home');
     Route::resource('/customer', 'Sale\CustomerController')->middleware('auth');
 
     // All sales routes 
+    Route::get('/sale/receive', 'Sale\SaleController@receive')->name('sale.receive')->middleware('auth');
+    Route::get('/sale/delete/{id}', 'Sale\SaleController@destroy')->name('sale.delete')->middleware('auth');
     Route::resource('/sale', 'Sale\SaleController')->middleware('auth');
 
     // All customer report routes 

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Add Lorry Info</div>
+                <div class="card-header">Add Item to Store</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('store.store') }}" onsubmit="add.disabled = true; return true;">
@@ -15,7 +15,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">Customer Name</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name">
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" name="name" value="{{ old('name') }}" required autocomplete="name">
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -28,7 +28,7 @@
                             <label for="item_name" class="col-md-4 col-form-label text-md-right">Item Name</label>
 
                             <div class="col-md-6">
-                                <input id="item_name" type="text" class="form-control @error('item_name') is-invalid @enderror" name="item_name" value="{{ old('item_name') }}" required autocomplete="item_name">
+                                <input id="item_name" type="text" class="form-control @error('item_name') is-invalid @enderror" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" name="item_name" value="{{ old('item_name') }}" required autocomplete="item_name">
                                 @error('item_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -139,7 +139,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
 
                             <div class="col-md-6">
-                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" oninput="this.value = this.value.toUpperCase()" value="{{ old('description') }}" autocomplete="description" autofocus>
+                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" value="{{ old('description') }}" autocomplete="description" autofocus>
 
                                 @error('description')
                                     <span class="invalid-feedback" role="alert">

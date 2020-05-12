@@ -83,7 +83,9 @@
                         <select onchange="if (this.value) window.location.href='withdraw/'+ this.value" class="custom-select" style="width: auto;">
                                 <option selected >Withdraw</option>
                             @foreach($store_info as $info)
-                                <option value="{{$info['id']}}">{{$info['floor']}} | {{$info['block']}} </option>
+                                @if($info['remain_qty'] > 0)
+                                    <option value="{{$info['id']}}">{{$info['floor']}} | {{$info['block']}} &#8594; qty-{{$info['remain_qty']}}</option>
+                                @endif
                             @endforeach
                         </select>
                         <button type="button" class="btn text-success btn-outline-success mx-2" onclick="exportTableToExcel('withdraw', '{{$store->item_name}}_{{$store->name}}')">Save</button>

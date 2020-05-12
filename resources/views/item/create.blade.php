@@ -15,7 +15,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Item name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -29,7 +29,7 @@
                             <label for="sku" class="col-md-4 col-form-label text-md-right">{{ __('SKU') }}</label>
 
                             <div class="col-md-6">
-                                <input id="sku" type="text" class="form-control @error('sku') is-invalid @enderror" name="sku" value="{{ old('sku') }}" required autocomplete="sku">
+                                <input id="sku" type="text" class="form-control @error('sku') is-invalid @enderror" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" name="sku" value="{{ old('sku') }}" required autocomplete="sku">
 
                                 @error('sku')
                                     <span class="invalid-feedback" role="alert">
@@ -43,7 +43,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                             <div class="col-md-6">
-                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" autocomplete="description">
+                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" name="description" autocomplete="description">
 
                                 @error('description')
                                     <span class="invalid-feedback" role="alert">

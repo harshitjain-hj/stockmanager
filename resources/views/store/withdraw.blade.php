@@ -100,7 +100,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
 
                             <div class="col-md-6">
-                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" oninput="this.value = this.value.toUpperCase()" value="{{ old('description') }}" autocomplete="description" autofocus>
+                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" value="{{ old('description') }}" autocomplete="description" autofocus>
 
                                 @error('description')
                                     <span class="invalid-feedback" role="alert">

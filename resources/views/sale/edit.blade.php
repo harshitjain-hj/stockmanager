@@ -17,7 +17,7 @@
                             <label for="bill_no" class="col-md-4 col-form-label text-md-right">Bill no.</label>
 
                             <div class="col-md-6">
-                                <input id="bill_no" type="text" class="form-control @error('bill_no') is-invalid @enderror" name="bill_no" value="{{ old('bill_no') ?? $sale->bill_no }}" required autocomplete="bill_no" autofocus style="text-transform: uppercase">
+                                <input id="bill_no" type="text" class="form-control @error('bill_no') is-invalid @enderror" oninput="this.value = this.value.toUpperCase()" name="bill_no" value="{{ old('bill_no') ?? $sale->bill_no }}" required autocomplete="bill_no" autofocus style="text-transform: uppercase">
 
                                 @error('bill_no')
                                     <span class="invalid-feedback" role="alert">
@@ -130,7 +130,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                             <div class="col-md-6">
-                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" value="{{ old('description') ?? $sale->description }}" name="description" autocomplete="description" style="text-transform: capitalize">
+                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" value="{{ old('description') ?? $sale->description }}" name="description" autocomplete="description" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);">
 
                                 @error('description')
                                     <span class="invalid-feedback" role="alert">

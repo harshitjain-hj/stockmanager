@@ -32,7 +32,7 @@ class SaleController extends Controller
         if(DB::table('sales')->count()) {
             if($char == 'bill') {
                 // $char = 'A';
-                $number = range(0,400);
+                $number = range(400,800);
                 // dd($number);
                 $sales =  DB::table('sales')->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
             } elseif ($request->path() == 'sale' && empty($char)) {

@@ -38,4 +38,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
     Route::get('/store/withdraw/{id}', 'Store\StoreController@withdraw')->name('store.withdraw')->middleware('auth');
 
-    Route::post('/store/withdraw/update', 'Store\StoreController@withdraw_update')->name('store.withdraw.update')->middleware('auth');
+    Route::post('/store/withdraw/make', 'Store\StoreController@withdraw_update')->name('store.withdraw.update')->middleware('auth');
+
+    // All withdraw routes
+        Route::resource('/store/withdraw', 'Store\WithdrawController')->middleware('auth');

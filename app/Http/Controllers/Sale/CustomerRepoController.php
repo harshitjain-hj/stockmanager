@@ -51,7 +51,7 @@ class CustomerRepoController extends Controller
         $char = '';
         $char = $request->character;
         if($char == 'bill') {
-            $number = range(0, 400);
+            $number = range(0, 800);
             $sales =  DB::table('sales')->where('customer_id', $repo->customer_id)->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
         } elseif (!empty($char)) {
             $sales =  DB::table('sales')->where('customer_id', $repo->customer_id)->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));

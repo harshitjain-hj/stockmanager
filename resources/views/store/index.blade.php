@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-
+<?php
+    $total_qty = 0;
+?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -55,8 +57,13 @@
                                     <td>{{$row->remain_qty}}</td>
                                     <td>{{$row->storage_date}}</td>
                                 </tr>
-                                
+
+                                <?php $total_qty = $total_qty + $row->remain_qty ?>
                             @endforeach
+                                <tr>
+                                    <td colspan=4>Total Quantity</td>
+                                    <td>{{$total_qty}}</td>
+                                </tr>
                             </tbody>
                         </table>                       
                     </div>

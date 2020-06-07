@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-
 use App\Stock;
 use App\Sale;
 
@@ -26,18 +25,22 @@ class HomeController extends Controller
                     ->where('bill_date', '>=', date('Y-m-d',strtotime("-30 days")))
                     ->where('item_id', $item['item_id'])
                     ->groupBy('bill_date', 'name')
-                    // ->orderBy('bill_date', 'desc')
                     ->get();
 
+            if($sales->isEmpty()) {
+                $result = [
+                    "item_id" => $item['item_id'],
+                    "bill_date" => date("Y-m-d"),
+                    "total_qty" => "0",
+                    "total_amount" => "0",
+                ];
+                $sales = [(object) $result];
+            }
+            
             $item['sales'] = $sales;
             // dd($sales);
         }
-        // $sales = Sale::selectRaw('item_id, bill_date, sum(qty) as total_qty, sum(total_amount) as total_amount')
-        //             ->where('bill_date', '>=',date('Y-m-d',strtotime("-7 days")))
-        //             ->groupBy('bill_date')
-        //             ->orderBy('bill_date', 'desc')
-        //             ->get();
-        // dd(json_encode($items));
+        
         return view('home', compact('items'));
     }
 }

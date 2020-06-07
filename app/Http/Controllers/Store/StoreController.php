@@ -79,17 +79,21 @@ class StoreController extends Controller
                             ->where('store_id', $id)->get();
         // dd($store_info);
         $withdraw_infos = WithdrawInfo::where('withdraw_infos.store_id', $id)
+                                    ->select('withdraw_infos.id', 'stores.floor', 'stores.block', 'bill_no', 'withdraw_qty','withdraw_date', 'withdraw_infos.lorry_no', 'withdraw_infos.description')
                                     ->join('stores', 'withdraw_infos.batch_id', 'stores.id')
                                     ->orderBy('withdraw_date', 'desc')
-                                    ->get(array('stores.floor', 'stores.block', 'withdraw_infos.*'));
+                                    ->get();
         // dd($withdraw_infos);
         return view('store.show', compact('store', 'store_info', 'withdraw_infos'));
     }
 
     public function withdraw($id)
     {
+        $bill_no = withdrawInfo::select('bill_no')->orderBy('id', 'desc')->first();
+        $bill_no = preg_replace("/[^A-Za-z ]/", '', $bill_no['bill_no']) . (preg_replace("/[^0-9 ]/", '', $bill_no['bill_no'])+1);
+        // dd($bill_no);
         $store = Store::select('id', 'store_id', 'name', 'item_name','remain_qty', 'block', 'floor', 'storage_date')->findorFail($id);
-        return view('store.withdraw', compact('id', 'store'));
+        return view('store.withdraw', compact('id', 'store', 'bill_no'));
     }
 
     public function withdraw_update(Request $request)
@@ -97,9 +101,11 @@ class StoreController extends Controller
         $withdraw_info = request()->validate([
             "batch_id" => "required|numeric",
             "store_id" => "required|numeric",
+            "bill_no" => "required|string",
             "withdraw_qty" => "required|numeric|lte:remain_qty",
             "lorry_no" => "string|nullable|regex:/^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/",
             "withdraw_date" => "required|date",
+            "description" => "string|nullable"
         ]);
         $withdraw_info['created_at'] = date('Y-m-d');
         // dd($withdraw_info);

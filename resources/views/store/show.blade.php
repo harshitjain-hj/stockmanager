@@ -4,9 +4,16 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            
+            @if(Session::has('success'))
+                <div class="alert alert-dismissible alert-warning col-md-5 mb-1" style="margin: auto;" role="alert">
+                {{Session::get('success')}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+            @endif
             <div class="row p-2">
-                <div class="col-sm-7 pb-4">
+                <div class="col-sm-6 pb-4">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -36,7 +43,6 @@
                             <table class="table table-borderless table-hover table-sm text-center">
                                 <thead>
                                     <tr>
-                                        <!-- <th scope="col">#</th> -->
                                         <th scope="col">Remain qty</th>
                                         <th scope="col" class="align-middle">Location</th>
                                         <th scope="col">Payable Amount</th>
@@ -46,8 +52,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($store_info as $info)
-                                        <tr>
-                                            <!-- <th scope="row">1</th> -->
+                                        <tr class="{{ date('Y-m-d', strtotime('-30 days')) >= $info['storage_date'] ? 'alert-danger' : 'alert-success' }}">
                                             <td>{{$info['remain_qty']}}</td>
                                             <td>{{$info['floor']}} | {{$info['block']}}</td>
                                             <td>&#8377;{{$info['payable_amount']}}</td>
@@ -78,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                     <div class="row justify-content-center pb-4">
                         <select onchange="if (this.value) window.location.href='withdraw/'+ this.value" class="custom-select" style="width: auto;">
                                 <option selected >Withdraw</option>
@@ -94,7 +99,7 @@
                     <?php $withdraw_infos = json_decode( $withdraw_infos, true ); ?>
                     @if(!empty($withdraw_infos))
                         <table class="table-borderless text-center bg-white bg-white table-responsive-md table-sm" style="border-radius: 5px;" id="withdraw">
-                            <thead>
+                            <thead style="text-transform:capitalize;">
                                 <tr>
                                     @foreach($withdraw_infos[0] as $key => $value)
                                         @if($key == 'batch_id' || $key == 'block' || $key == 'created_at' || $key == 'store_id' || $key == 'id')
@@ -120,6 +125,7 @@
                                                 <td>{{$value}}</td>
                                             @endif
                                         @endforeach
+                                        <td><a href="{{ route('withdraw.edit', $withdraw_info['id']) }}" onclick="return confirm('Are you sure you want to Edit?')"><img src="{{ URL::asset('images/edit.png')}}" alt="Edit" style="height: 22px; width: 22px; display: block; margin: auto;"></a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

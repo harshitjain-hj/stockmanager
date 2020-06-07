@@ -8,14 +8,15 @@
                 <div class="card-header">Withdraw Info</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('store.withdraw.update') }}">
+                    <form method="POST" action="{{ route('withdraw.update', $store['id']) }}">
+                        {{ method_field('PATCH') }}
                         @csrf
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Customer Name</label>
 
                             <div class="col-md-6">
-                                <input name="batch_id" type="hidden" value="{{ $id }}">
+                                <input name="batch_id" type="hidden" value="{{ $store['batch_id'] }}">
                                 <input name="store_id" type="hidden" value="{{ $store['store_id'] }}">
                                 <input id="name" type="text" readonly class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $store['name'] }}" autocomplete="name">
                                 @error('name')
@@ -43,7 +44,7 @@
                             <label for="remain_qty" class="col-md-4 col-form-label text-md-right">Quantity remain</label>
 
                             <div class="col-md-6">
-                                <input id="remain_qty" type="text" readonly class="form-control @error('remain_qty') is-invalid @enderror" name="remain_qty" value="{{ $store['remain_qty'] }}" required autocomplete="remain_qty">
+                                <input id="remain_qty" type="text" readonly class="form-control @error('remain_qty') is-invalid @enderror" name="remain_qty" value="{{ $store['remain_qty'] + $store['withdraw_qty'] }}" required autocomplete="remain_qty">
 
                                 @error('remain_qty')
                                     <span class="invalid-feedback" role="alert">
@@ -57,7 +58,7 @@
                             <label for="bill_no" class="col-md-4 col-form-label text-md-right">{{ __('Bill no.') }}</label>
 
                             <div class="col-md-6">
-                                <input id="bill_no" type="text" class="form-control @error('bill_no') is-invalid @enderror" name="bill_no" value="{{ $bill_no }}" required autocomplete="bill_no" oninput="this.value = this.value.toUpperCase()">
+                                <input id="bill_no" type="text" class="form-control @error('bill_no') is-invalid @enderror" name="bill_no" value="{{ $store['bill_no'] }}" required autocomplete="bill_no" oninput="this.value = this.value.toUpperCase()">
 
                                 @error('bill_no')
                                     <span class="invalid-feedback" role="alert">
@@ -71,7 +72,7 @@
                             <label for="withdraw_qty" class="col-md-4 col-form-label text-md-right">Withdraw Quantity</label>
 
                             <div class="col-md-6">
-                                <input id="withdraw_qty" type="text" class="form-control @error('withdraw_qty') is-invalid @enderror" name="withdraw_qty" value="{{ old('withdraw_qty') }}" required autocomplete="withdraw_qty">
+                                <input id="withdraw_qty" type="text" class="form-control @error('withdraw_qty') is-invalid @enderror" name="withdraw_qty" value="{{ $store['withdraw_qty'] }}" required autocomplete="withdraw_qty">
 
                                 @error('withdraw_qty')
                                     <span class="invalid-feedback" role="alert">
@@ -86,7 +87,7 @@
                             <label for="lorry_no" class="col-md-4 col-form-label text-md-right">{{ __('Lorry no') }}</label>
 
                             <div class="col-md-6">
-                                <input id="lorry_no" type="text" class="form-control @error('lorry_no') is-invalid @enderror" name="lorry_no" oninput="this.value = this.value.toUpperCase()" value="{{ old('lorry_no') }}" required autocomplete="lorry_no">
+                                <input id="lorry_no" type="text" class="form-control @error('lorry_no') is-invalid @enderror" name="lorry_no" oninput="this.value = this.value.toUpperCase()" value="{{ $store['lorry_no'] }}" required autocomplete="lorry_no">
 
                                 @error('lorry_no')
                                     <span class="invalid-feedback" role="alert">
@@ -100,7 +101,7 @@
                             <label for="withdraw_date" class="col-md-4 col-form-label text-md-right">Withdraw date</label>
 
                             <div class="col-md-6">
-                                <input id="withdraw_date" type="date" class="form-control{{ $errors->has('withdraw_date') ? ' is-invalid' : '' }}" name="withdraw_date" value="<?php echo date("Y-m-d");?>" required autofocus>
+                                <input id="withdraw_date" type="date" class="form-control{{ $errors->has('withdraw_date') ? ' is-invalid' : '' }}" name="withdraw_date" value="{{$store['withdraw_date']}}" required autofocus>
 
                                 @if ($errors->has('withdraw_date'))
                                     <span class="invalid-feedback" role="alert">
@@ -114,7 +115,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
 
                             <div class="col-md-6">
-                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" value="{{ old('description') }}" autocomplete="description" autofocus>
+                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);" value="{{$store['description']}}" autocomplete="description" autofocus>
 
                                 @error('description')
                                     <span class="invalid-feedback" role="alert">

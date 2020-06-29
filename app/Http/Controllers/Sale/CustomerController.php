@@ -9,34 +9,18 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $customers = Customer::select('name', 'address', 'mobileno', 'other')->orderBy('name', 'asc')->get();
+        $customers = Customer::select('id', 'name as Name', 'address as Address', 'mobileno as Mob no.', 'other as Other')->orderBy('name', 'asc')->get();
         // dd($customers);
         return view('customer.index', compact('customers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('customer.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //validating data
@@ -53,46 +37,29 @@ class CustomerController extends Controller
         return redirect()->route('customer.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
     public function show(Customer $customer)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customer $customer)
+    public function edit($id)
     {
-        //
+        $customer_info = Customer::select('id', 'name', 'address', 'mobileno', 'other')->where('id', $id)->firstOrFail();
+        return view('customer.edit', compact('customer_info'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $data = request()->validate([
+            'name' => 'required',
+            'address' => 'string|nullable',
+            'mobileno' => 'required|regex:/[0-9]{10}/',
+            'other' => 'nullable|regex:/[0-9]{10}/',
+        ]);
+        $customer->update($data);
+        return redirect()->route('customer.index')->with('success', 'Updated Successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Customer $customer)
     {
         //

@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <?php $lorry_infos = json_decode( $lorry_infos, true ); ?>
                     @if(!empty($lorry_infos))
-                        <table class="table table-hover table-sm table-responsive-md" id="lorry_infos">
+                        <table class="table table-hover table-sm table-responsive-md text-center" id="lorry_infos">
                             <thead style="text-transform:capitalize;">
                                 <tr>
                                     @foreach($lorry_infos[0] as $key => $value)
@@ -37,6 +37,8 @@
 
                                             @elseif($key == 'item_id')
                                                 <td>{{$lorry_info['name']}}</td>
+                                            @elseif($key == 'created_at')
+                                                <td>{{date("d-m-Y", strtotime($value))}}</td>
                                             @else
                                                 <td>{{$value}}</td>
                                             @endif

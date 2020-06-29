@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-10">
             @if(Session::has('success'))
                 <div class="alert alert-dismissible alert-warning col-md-5 mb-1" style="margin: auto;" role="alert">
                 {{Session::get('success')}}

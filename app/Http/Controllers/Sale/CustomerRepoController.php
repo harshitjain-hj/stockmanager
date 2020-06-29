@@ -51,17 +51,24 @@ class CustomerRepoController extends Controller
         $char = '';
         $char = $request->character;
         if($char == 'bill') {
-            $number = range(0, 800);
-            $sales =  DB::table('sales')->where('customer_id', $repo->customer_id)->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+            // $number = range(0, 800);
+            $sales =  DB::table('sales')
+                        ->where('customer_id', $repo->customer_id)
+                        // ->whereIn('bill_no', $number)
+                        ->whereBetween('bill_no', array(1,2000))
+                        ->join('customers', 'sales.customer_id', 'customers.id')
+                        ->orderBy('bill_no', 'desc')
+                        ->get(array('sales.*', 'customers.name'));
         } elseif (!empty($char)) {
             $sales =  DB::table('sales')->where('customer_id', $repo->customer_id)->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
         } else {
             // variables
-            $number = range(0, 800);
+            // $number = range(0, 990);
             $amount = 0;
             $pending = [];
             $sales = DB::table('sales')->where('customer_id', $repo->customer_id)
-                ->whereNotIn('bill_no', $number)
+                // ->whereNotIn('bill_no', $number)
+                ->whereNotBetween('bill_no', array(1,2001))
                 ->join('customers', 'sales.customer_id', 'customers.id')
                 ->orderBy('bill_date', 'desc')
                 ->orderBy('created_at', 'desc')
@@ -75,7 +82,7 @@ class CustomerRepoController extends Controller
                     }
                 }
                 $sales = json_encode($pending);
-            // dd($pending);
+            // dd($sales);
         }
 
         

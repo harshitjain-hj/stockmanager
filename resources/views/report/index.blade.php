@@ -21,16 +21,7 @@
 							<h4 class="pt-1">Customer's Report</h4>
 						</div>
                         <div class="input-group col-sm-5">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon">Customer</span>
-							</div>
-							<select onchange="if (this.value) window.location.href='repo/'+ this.value" class="custom-select">
-									<option selected>Choose customer...</option>
-								@foreach($repos as $repo)
-                                    {{$repo['name']}}
-				  					<option value="{{$repo['id']}}">{{$repo['name']}}</option>
-			  					@endforeach
-							</select>
+    						<input type="text" class="form-control" id="item_initials" placeholder="Enter Customer Name initials" onkeyup="myFunction()">
                             <button type="button" class="btn btn-primary ml-2" onclick="exportTableToExcel('report', 'report')">Save</button>
 						</div>
                 </div>
@@ -60,7 +51,7 @@
                                     @endforeach
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="listing">
                                 @foreach($repos as $repo)
                                     <tr onclick="window.location='/repo/{{$repo['id']}}'">
                                         @foreach($repo as $key => $value)
@@ -102,4 +93,23 @@
         </div>
     </div>
 </div>
+
+<script>
+	function myFunction() {
+	    var input, filter, listing, item, a, i, txtValue;
+	    input = document.getElementById("item_initials");
+	    filter = input.value.toUpperCase();
+	    listing = document.getElementById("listing");
+	    item = listing.getElementsByTagName("tr");
+	    for (i = 0; i < item.length; i++) {
+	        a = item[i].getElementsByTagName("td")[0];
+	        txtValue = a.textContent || a.innerText;
+	        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+	            item[i].style.display = "";
+	        } else {
+	            item[i].style.display = "none";
+	        }
+	    }
+	}
+</script>
 @endsection

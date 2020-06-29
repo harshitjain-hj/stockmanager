@@ -19,29 +19,30 @@ use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $char = '';
         $sales = '';
         $char = $request->character;
-        if(DB::table('sales')->count()) {
+        // if(DB::table('sales')->count()) {
             if($char == 'bill') {
                 // $char = 'A';
-                $number = range(400,800);
+                // $number = range(600,1000);
                 // dd($number);
-                $sales =  DB::table('sales')->whereIn('bill_no', $number)->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
+                $sales =  DB::table('sales')
+                            // ->whereIn('bill_no', $number)
+                            ->whereBetween('bill_no', array(1,2001))
+                            ->join('customers', 'sales.customer_id', 'customers.id')
+                            ->orderBy('bill_no', 'desc')
+                            ->select(array('sales.*', 'customers.name'))->get();
+                // dd($sales);
             } elseif ($request->path() == 'sale' && empty($char)) {
+                // If viewing a particular diary
                 $sales = DB::table('sales')
                         ->join('customers', 'sales.customer_id', 'customers.id')
                         ->orderBy('bill_no', 'desc')
                         ->where('bill_date', '>=', date('Y-m-d',strtotime("-2 days")))
                         ->get(array('sales.*', 'customers.name'));
-            // dd($sales);
             } 
             else {
                 $sales = DB::table('sales')->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')
@@ -51,50 +52,51 @@ class SaleController extends Controller
                 ->get(array('sales.*', 'customers.name'));
                 // dd($sales);
             }
-        }
+        // }
         $items = Item::select('id', 'name', 'sku')->get();
         // dd($customers);
         return view('sale.index', compact('sales', 'items'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $number = range(0, 800);
-        $id = Sale::select('bill_no')->whereNotIn('bill_no', $number)->latest()->first();
+        // $number = range(700, 998);
+        $id = Sale::select('bill_no')
+                    ->whereNotBetween('bill_no', array(1,2001))
+                    // ->whereNotIn('bill_no', $number)
+                    ->latest()
+                    ->first();
         $bill_no = "Bill No";
         if(!empty($id)){
             $bill_no = preg_replace("/[^A-Za-z ]/", '', $id['bill_no']) . (preg_replace("/[^0-9 ]/", '', $id['bill_no'])+1);
         // dd($bill_no);
         }
         $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
-        $items = Item::select('id', 'name')->get();
+        $items = Item::select('id', 'name')
+                        ->whereNotBetween('id', [2, 5])
+                        ->get();
         return view('sale.create', compact('bill_no', 'customers', 'items'));
     }
     public function receive()
     {   
-        $number = range(0, 800);
-        $id = Sale::select('bill_no')->whereIn('bill_no', $number)->orderBy('bill_no', 'desc')->first();
+        // $number = range(800, 1200);
+        $id = Sale::select('bill_no')
+                    // ->whereIn('bill_no', $number)
+                    ->whereBetween('bill_no', array(1,2001))
+                    ->orderBy('bill_no', 'desc')
+                    ->first();
         $bill_no = "Bill No";
         if(!empty($id)){
             $bill_no = preg_replace("/[^A-Za-z ]/", '', $id['bill_no']) . (preg_replace("/[^0-9 ]/", '', $id['bill_no'])+1);
         // dd($bill_no);
         }
         $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
-        $items = Item::select('id', 'name')->get();
+        $items = Item::select('id', 'name')
+                        ->whereNotBetween('id', [2, 5])
+                        ->get();
         return view('sale.receive', compact('bill_no', 'customers', 'items'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //validating data
@@ -147,23 +149,11 @@ class SaleController extends Controller
         return redirect()->route('sale.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $sale = DB::table('sales')->where('sales.id', $id)
@@ -176,13 +166,7 @@ class SaleController extends Controller
         return view('sale.edit', compact('sale', 'customers'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
         // dd($request->all());
@@ -235,12 +219,6 @@ class SaleController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $del_sale = Sale::findOrFail($id);

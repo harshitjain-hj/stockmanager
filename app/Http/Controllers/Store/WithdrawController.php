@@ -61,14 +61,17 @@ class WithdrawController extends Controller
         ]);
         // dd($withdraw_info);
         
-        $store = Store::select('store_id','remain_qty')->where('id', $withdraw_info['batch_id'])->first();
+        $store = Store::select('id', 'store_id','remain_qty')->where('id', $withdraw_info['batch_id'])->first();
         
-        $store_update_info['remain_qty'] = $store['remain_qty'] - $withdraw_info['withdraw_qty'];
+        $old_withdraw = WithdrawInfo::where('id', $id)->select('id', 'withdraw_qty')->first();
+        // dd($old_withdraw);
+
+        $store_update_info['remain_qty'] = $store['remain_qty'] + $old_withdraw['withdraw_qty'] - $withdraw_info['withdraw_qty'];
         $store_update_info['updated_at'] = date('Y-m-d');
 
-        $withdraw = WithdrawInfo::where('id', $id)->update($withdraw_info);
+        $old_withdraw->update($withdraw_info);
         
-        Store::where('id', $withdraw_info['batch_id'])->update($store_update_info);
+        $store->update($store_update_info);
 
         return redirect('/store/'.$store->store_id)->with('success', 'Modified successfully!');    
 

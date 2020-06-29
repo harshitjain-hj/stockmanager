@@ -17,7 +17,6 @@
                 </button>
                 </div>
             @endif
-            
             <div class="card">
                 <div class="card-header d-flex justify-content-around">
                     <div class="row">

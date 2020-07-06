@@ -30,8 +30,8 @@ class ItemController extends Controller
             'sku' => 'required|string',
             'description' => 'string|nullable',
             'image' => 'string|nullable',
+            'asset' => 'integer'
         ]);
-        // dd($data);
         
         $item = new Item($data);
         $item->save();
@@ -55,6 +55,7 @@ class ItemController extends Controller
             'sku' => 'required|string',
             'description' => 'string|nullable',
             'image' => 'string|nullable',
+            'asset' => 'integer'
         ]);
         $item->update($data);
         return redirect()->route('item.index')->with('success', 'Updated Successfully!');

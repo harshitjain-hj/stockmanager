@@ -54,6 +54,18 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="asset" class="col-md-4 col-form-label text-md-right">{{ __('Asset') }}</label>
+
+                            <div class="col-md-6 form-check">
+                                <input class="form-check-input" type="hidden" name="asset" id="asset" value="0">
+                                <input class="form-check-input" type="checkbox" name="asset" id="asset" onclick="this.value = this.checked ? 1 : 0;">
+                                <label class="form-check-label" for="gridCheck">
+                                    Check if there is any asset associated.
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Image url') }}</label>
 
                             <div class="col-md-6">

@@ -6,6 +6,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// for non authenticated users
+Route::get('/customerlist', 'Voucher\VoucherController@customerList');
+Route::get('/customerlist/{id}', 'Voucher\VoucherController@option')->name('option');
+Route::get('/customerlist/{id}/sale', 'Voucher\VoucherController@sale')->name('option.sale');
+Route::get('/customerlist/{id}/recieve', 'Voucher\VoucherController@recieve')->name('option.recieve');
+Route::post('/customerlist/{id}/generatesale', 'Voucher\VoucherController@generatesale')->name('generate.sale');
+Route::post('/customerlist/{id}/salerecite', 'Voucher\VoucherController@printsale')->name('print.sale');
+
+// for authenticated users
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

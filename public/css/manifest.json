@@ -1,0 +1,9 @@
+{
+    "short_name": "Manager App",
+    "name": "Manage",
+    "start_url": "/customerlist",
+    "theme_color": "#FFE1C4",
+    "background_color": "#FFE9D2",
+    "display": "standalone",
+    "orientation": "portrait"
+  }

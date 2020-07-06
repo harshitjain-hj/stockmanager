@@ -45,25 +45,48 @@
         }
     </script>
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
     
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <link rel="manifest" href="{{ asset('css/manifest.json') }}">
+
+    <style>
+        .loader-wrapper {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: white;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    </style>
+    <script>
+        $(window).on("load",function(){
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
+    
 </head>
 <body class="bg-dark">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    Manage
-                </a>
+        <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
+            <div class="container d-flex justify-content-between">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <a class="navbar-brand mx-3" href="#">Manage</a>
+                <!-- <button class="btn btn-outline-info" id="spcl-btn">Hagd</button> -->
+                <label for="submit-form" class="btn btn-outline-success mb-0" id="spcl-btn" tabindex="0" style="visibility:hidden;">Submit</label>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
@@ -131,9 +154,19 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-3">
             @yield('content')
         </main>
+        <div class="loader-wrapper">
+        <div class="text-center">
+        <div class="spinner-grow spinner-grow-sm mb-2" role="status">
+        </div>
+        <div class="spinner-grow" role="status">
+        </div>
+        <div class="spinner-grow spinner-grow-sm mb-2" role="status">
+        </div>
+        </div>
+    </div>
     </div>
 </body>
 </html>

@@ -2,14 +2,12 @@
 
 @section('content')
 <?php $repos = json_decode( $repos, true ); ?>
-<?php $customers = json_decode( $customers, true ); ?>
 <?php $items = json_decode( $items, true ); ?>
 <!-- Variables -->
 <?php
     $total_amount = 0;
     $remain_amount = 0;
 	$remain_assets = 0;
-
 ?>
 
 <div class="container">
@@ -27,27 +25,21 @@
                 </div>
 
                 <div class="card-body pt-0">
-                <ul class="nav justify-content-center">
-                    @foreach($items as $item)
-                        <li class="nav-item">
-                            <a class="nav-link active" href="repo?item={{$item['id']}}">{{$item['name']}}</a>
-                        </li>
-                    @endforeach
-                </ul>
                     @if(!empty($repos))
                         <table class="table table-hover table-sm table-responsive-md" id="report">
                             <thead>
                                 <tr>
                                     @foreach($repos[0] as $key => $value)
-                                        @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
+                                        @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name' || $key == 'remain_assets')
 
                                         @elseif ($key == 'customer_id')
-                                            <th scope="col" class="align-middle">Customer Name</th>
-                                        @elseif ($key == 'item_id')
-                                            <th scope="col" class="align-middle">Item Name</th>        
+                                            <th scope="col" class="align-middle">Customer Name</th>        
                                         @else
-                                            <th scope="col" class="align-middle">{{ $key}}</th>
+                                            <th scope="col" class="align-middle">{{ $key }}</th>
                                         @endif  
+                                    @endforeach
+                                    @foreach($items as $item)
+                                        <th scope="col" class="align-middle">{{ $item['name'] }} {{ $item['sku'] }}</th>
                                     @endforeach
                                 </tr>
                             </thead>
@@ -59,27 +51,25 @@
 
                                             @elseif ($key == 'customer_id')
                                                 <td>{{$repo['name']}}</td>
-                                            @elseif ($key == 'item_id')
-                                                <?php 
-                                                    $key = array_search($value, array_column($items, 'id'));
-                                                    $name = $items[$key]['name'];
-                                                    $sku = $items[$key]['sku'];
-                                                    // dd($name);
-                                                ?>
-                                                <td>{{$name}} | {{$sku}}</td>
+                                            @elseif ($key == 'remain_assets')
+                                                @if(json_decode($value, true))
+                                                    @foreach(json_decode($value, true) as $item)   
+                                                        <td>{{$item['asset_remain']}}</td>
+                                                    @endforeach
+                                                @else
+                                                    <td>-</td>
+                                                @endif
                                             @else
                                                 <td>{{$value}}</td>
                                             @endif
                                         @endforeach
                                         <?php if($repo['remain_amount'] >= 0 ) $remain_amount = $remain_amount + $repo['remain_amount']; ?>
-                                        <?php if($repo['remain_assets'] >= 0 ) $remain_assets = $remain_assets + $repo['remain_assets']; ?>
                                     </tr>
                                 @endforeach
                                 <tr class="table-dark text-body">
-                                    <td>&nbsp</td>
                                     <td colspan=2 class="text-center">Total</td>
                                     <td>{{$remain_amount}}</td>
-                                    <td>{{$remain_assets}}</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                             </tbody>
                         </table>

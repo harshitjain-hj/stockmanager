@@ -68,7 +68,12 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        @can('manage-users')
+                            <a href="{{ url('/home') }}">Home</a>
+                        @endcan
+                        @can('create-vouchers')
+                            <a href="{{ route('customerlist') }}">Vouchers</a>
+                        @endcan
                     @else
                         <a href="{{ route('login') }}">Login</a>
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Customer;
 use App\Item;
 use App\CustomerRepo;
+use App\Voucher;
 
 use DB;
 
@@ -50,7 +51,7 @@ class VoucherController extends Controller
 
     public function generatesale(Request $request, $id)
     {
-        dd($request->all());
+        // dd($request->all());
         $customer = Customer::select('id', 'name')->findOrFail($id);
         $item_array = [];
         foreach ($request->all() as $ids => $info) {
@@ -67,7 +68,9 @@ class VoucherController extends Controller
         $response = $request->all();
         $asset_data = [];
         if(isset($response['asset'])) {
-            $asset_data = $response['asset'];
+            foreach ($response['asset'] as $ids => $info) {
+                array_push($asset_data, $info);
+            }
         }
         $repo = CustomerRepo::where("customer_id", $id)->select("remain_amount", "remain_assets")->first();
         $outstanding = [
@@ -78,14 +81,49 @@ class VoucherController extends Controller
             "voucher_type" => "Sale",
             "customer_id" => $id,
             "item_data" => $response['item_list'],
-            "asset_data" => $asset_data,
+            "asset_data" => json_encode($asset_data),
             "total_amount" => $response['total_amount'],
             "amount_recieved" => $response['amt_recieved'],
-            "outstanding" => $outstanding,
+            "outstanding" => json_encode($outstanding),
             "remark" => $response['remark'],
         ];
-        dd($data);
-        return view('voucher.print_sale', compact('item_array', 'customer')); 
+        $voucher = new Voucher($data);
+        $voucher->save();
+
+        return view('voucher.print_sale', compact('customer', 'voucher')); 
+    }
+
+    public function printrecieve(Request $request, $id)
+    {
+        $customer = Customer::select('id', 'name')->findOrFail($id);
+        $response = $request->all();
+        $item_array = [];
+        if(isset($response['asset'])) {
+            foreach ($response['asset'] as $ids => $info) {
+                if($info['recieved'] !== NULL || $info['recieved'] != '0'){
+                    array_push($item_array, $info);
+                }
+            }
+        }
+        $repo = CustomerRepo::where("customer_id", $id)->select("remain_amount", "remain_assets")->first();
+        $outstanding = [
+            "remain_amount" => $repo['remain_amount'] - $response['recieved_amount'],
+            "remain_assets" => $repo['remain_assets']
+        ];
+        $data = [
+            "voucher_type" => "Recieve",
+            "customer_id" => $id,
+            "item_data" => NULL,
+            "asset_data" => json_encode($item_array),
+            "total_amount" => NULL,
+            "amount_recieved" => $response['recieved_amount'],
+            "outstanding" => json_encode($outstanding),
+            "remark" => $response['remark'],
+        ];
+        $voucher = new Voucher($data);
+        $voucher->save();
+
+        return view('voucher.print_recieve', compact('customer', 'voucher')); 
     }
 
     public function create()

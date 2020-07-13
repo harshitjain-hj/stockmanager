@@ -24,6 +24,7 @@ class HomeController extends Controller
             $sales = Sale::selectRaw('item_id, bill_date, sum(qty) as total_qty, sum(total_amount) as total_amount')
                     ->where('bill_date', '>=', date('Y-m-d',strtotime("-30 days")))
                     ->where('item_id', $item['item_id'])
+                    ->whereNotBetween('bill_no', array(1,2001))
                     ->groupBy('bill_date', 'name')
                     ->get();
 

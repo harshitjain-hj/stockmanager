@@ -77,6 +77,7 @@ class SaleController extends Controller
                         ->get();
         return view('sale.create', compact('bill_no', 'customers', 'items'));
     }
+
     public function receive()
     {   
         // $number = range(800, 1200);
@@ -93,6 +94,7 @@ class SaleController extends Controller
         $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
         $items = Item::select('id', 'name')
                         ->whereNotBetween('id', [2, 5])
+                        ->where('asset', '1')
                         ->get();
         return view('sale.receive', compact('bill_no', 'customers', 'items'));
     }
@@ -111,29 +113,47 @@ class SaleController extends Controller
             'given_amount' => 'required_with:given_assets|nullable|numeric',
             'given_assets' => 'required_with:given_amount|nullable|numeric',
         ]);
-        // dd($saledata);
         $saledata['total_amount'] = (string)($saledata['qty'] * $saledata['amount']);
-        // dd($saledata);
 
-        $customer_repo = CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->select('total_amount', 'remain_amount', 'remain_assets')->first();
-        // dd($customer_repo);
+        $customer_repo = CustomerRepo::where('customer_id', $saledata['customer_id'])->select('total_amount', 'remain_amount', 'remain_assets')->first();
         
+        $asset_status = Item::where('id', $saledata['item_id'])->select('asset')->first();
+
         if(empty($customer_repo)) {
+            if ($asset_status['asset'] == '1') {
+                $remain_assets = json_encode([[
+                    'asset_id' => $saledata['item_id'],
+                    'asset_remain' => $saledata['qty'] - $saledata['given_assets']
+                ]]);
+            } else {
+                $remain_assets = json_encode([]);
+            }     
             $repocreationdata = ([
                 'customer_id' => $saledata['customer_id'],
-                'item_id' => $saledata['item_id'],
                 'total_amount' => $saledata['total_amount'],
                 'remain_amount' => $saledata['total_amount'] - $saledata['given_amount'],
-                'remain_assets' => $saledata['qty'] - $saledata['given_assets'],
+                'remain_assets' => $remain_assets,
             ]);
             $repo = new CustomerRepo($repocreationdata);
             $repo->save();
 
         } else {
-            CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->update([
+            if ($asset_status['asset'] == '1') {
+                $asset_details = json_decode($customer_repo['remain_assets']);
+                $key = array_search($saledata['item_id'], array_column($asset_details, 'asset_id'));
+                if ($key !== false) {
+                    $asset_details[$key]->asset_remain = $asset_details[$key]->asset_remain + $saledata['qty'] - $saledata['given_assets'];
+                } else {
+                    array_push($asset_details, ['asset_id' => $saledata['item_id'], 'asset_remain' => $saledata['qty'] - $saledata['given_assets']]);
+                }
+            } else {
+                $asset_details = json_decode($customer_repo['remain_assets']);
+            }
+            // dd($asset_details);
+            CustomerRepo::where('customer_id', $saledata['customer_id'])->update([
                 'total_amount' => $customer_repo['total_amount'] + $saledata['total_amount'],
                 'remain_amount' => $customer_repo['remain_amount'] + $saledata['total_amount'] - $saledata['given_amount'],
-                'remain_assets' => $customer_repo['remain_assets'] + $saledata['qty'] - $saledata['given_assets'],
+                'remain_assets' => json_encode($asset_details)
             ]);
         }
         
@@ -183,28 +203,48 @@ class SaleController extends Controller
         ]);
 
         $saledata['total_amount'] = (string)($saledata['qty'] * $saledata['amount']);
-
+        $sale_data_asset_status = Item::where('id', $saledata['item_id'])->select('asset')->first();
+        
         $old_data = DB::table('sales')->where('id', $id)->first();
+        $old_data_asset_status = Item::where('id', $old_data->item_id)->select('asset')->first();
         // dd($old_data);
-
-        $old_customer_repo = CustomerRepo::where(['customer_id'=> $old_data->customer_id, 'item_id' => $old_data->item_id])->select('total_amount', 'remain_amount', 'remain_assets')->first();
-        // dd($old_customer_repo['total_amount']);
-
+        $old_customer_repo = CustomerRepo::where('customer_id', $old_data->customer_id)->select('total_amount', 'remain_amount', 'remain_assets')->first();
+        
+        if ($old_data_asset_status['asset'] == '1') {
+            $old_asset_details = json_decode($old_customer_repo['remain_assets']);
+            $key = array_search($old_data->item_id, array_column($old_asset_details, 'asset_id'));
+            if ($key !== false) {
+                $old_asset_details[$key]->asset_remain = $old_asset_details[$key]->asset_remain - $old_data->qty + $old_data->given_assets;
+            }
+        } else {
+            $old_asset_details = json_decode($customer_repo['remain_assets']);
+        }
         // for older entry sub
-        CustomerRepo::where(['customer_id'=> $old_data->customer_id, 'item_id' => $old_data->item_id])->update([
+        CustomerRepo::where('customer_id', $old_data->customer_id)->update([
             'total_amount' => $old_customer_repo['total_amount'] - $old_data->total_amount,
             'remain_amount' => $old_customer_repo['remain_amount'] - $old_data->total_amount + $old_data->given_amount,
-            'remain_assets' => $old_customer_repo['remain_assets'] - $old_data->qty + $old_data->given_assets,
+            'remain_assets' => json_encode($old_asset_details),
         ]);
 
-        $new_customer_repo = CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->select('total_amount', 'remain_amount', 'remain_assets')->first();
+        $new_customer_repo = CustomerRepo::where('customer_id', $saledata['customer_id'])->select('total_amount', 'remain_amount', 'remain_assets')->first();
         // dd($new_customer_repo);
-        
+
+        if ($sale_data_asset_status['asset'] == '1') {
+            $asset_details = json_decode($new_customer_repo['remain_assets']);
+            $key = array_search($saledata['item_id'], array_column($asset_details, 'asset_id'));
+            if ($key !== false) {
+                $asset_details[$key]->asset_remain = $asset_details[$key]->asset_remain + $saledata['qty'] - $saledata['given_assets'];
+            } else {
+                array_push($asset_details, ['asset_id' => $saledata['item_id'], 'asset_remain' => $saledata['qty'] - $saledata['given_assets']]);
+            }
+        } else {
+            $asset_details = json_decode($customer_repo['remain_assets']);
+        }
         // for newer entry add
-        CustomerRepo::where(['customer_id'=> $saledata['customer_id'], 'item_id' => $saledata['item_id']])->update([
+        CustomerRepo::where('customer_id', $saledata['customer_id'])->update([
             'total_amount' => $new_customer_repo['total_amount'] + $saledata['total_amount'],
             'remain_amount' => $new_customer_repo['remain_amount'] + $saledata['total_amount'] - $saledata['given_amount'],
-            'remain_assets' => $new_customer_repo['remain_assets'] + $saledata['qty'] - $saledata['given_assets'],
+            'remain_assets' => json_encode($asset_details)
         ]);
         
         Sale::where('id', $id)->update($saledata);
@@ -222,20 +262,32 @@ class SaleController extends Controller
     public function destroy($id)
     {
         $del_sale = Sale::findOrFail($id);
+        $del_sale_data_asset_status = Item::where('id', $del_sale->item_id)->select('asset')->first();
+
+
+        // modify customer repo
+        $customer_repo = CustomerRepo::where('customer_id', $del_sale->customer_id)->select('total_amount', 'remain_amount', 'remain_assets')->first();
+        
+        if ($del_sale_data_asset_status['asset'] == '1') {
+            $asset_details = json_decode($customer_repo['remain_assets']);
+            $key = array_search($del_sale->item_id, array_column($asset_details, 'asset_id'));
+            if ($key !== false) {
+                $asset_details[$key]->asset_remain = $asset_details[$key]->asset_remain - $del_sale->qty + $del_sale->given_assets;
+            }
+        } else {
+            $asset_details = json_decode($customer_repo['remain_assets']);
+        }
+        CustomerRepo::where('customer_id', $del_sale->customer_id)->update([
+            'total_amount' => $customer_repo['total_amount'] - $del_sale->total_amount,
+            'remain_amount' => $customer_repo['remain_amount'] - $del_sale->total_amount + $del_sale->given_amount,
+            'remain_assets' => json_encode($asset_details)
+        ]);
 
         // modify stock
         $stock = Stock::where(['item_id'=> $del_sale['item_id']])->select('unit_remain', 'updated_at')->first();
         Stock::where(['item_id'=> $del_sale['item_id']])->update([
             'unit_remain' => $stock['unit_remain'] + $del_sale['qty'],
             'updated_at' => date('Y-m-d H:i:s')
-        ]);
-
-        // modify customer repo
-        $customer_repo = CustomerRepo::where(['customer_id'=> $del_sale->customer_id, 'item_id' => $del_sale->item_id])->select('total_amount', 'remain_amount', 'remain_assets')->first();
-        CustomerRepo::where(['customer_id'=> $del_sale->customer_id, 'item_id' => $del_sale->item_id])->update([
-            'total_amount' => $customer_repo['total_amount'] - $del_sale->total_amount,
-            'remain_amount' => $customer_repo['remain_amount'] - $del_sale->total_amount + $del_sale->given_amount,
-            'remain_assets' => $customer_repo['remain_assets'] - $del_sale->qty + $del_sale->given_assets,
         ]);
 
         //delete sale

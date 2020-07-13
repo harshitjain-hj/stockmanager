@@ -125,6 +125,7 @@
                                                 <div id="show_{{explode('#', $item['info'])[0]}}" style="display: none;" class="col p-0 mt-0">
                                                     <div class="card-body p-1">
                                                         <input type="hidden" name="asset[{{explode('#', $item['info'])[0]}}][id]" value="{{explode('#', $item['info'])[0]}}">
+                                                        <input type="hidden" name="asset[{{explode('#', $item['info'])[0]}}][name]" value="{{explode('#', $item['info'])[1]}} {{explode('#', $item['info'])[2]}}">
                                                         <input type="hidden" name="asset[{{explode('#', $item['info'])[0]}}][sent]" value="{{$item['qty']}}">
                                                         <input type="text" name="asset[{{explode('#', $item['info'])[0]}}][recieved]" style="height: 30px; font-size: 24pt; border-color: #ffffff00;" autocomplete="off" class="form-control p-0 {{explode('#', $item['info'])[0]}}" inputmode="numeric" pattern="[0-9]*" placeholder="Recieved">
                                                     </div>

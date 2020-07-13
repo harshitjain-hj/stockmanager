@@ -107,47 +107,61 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sales</a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="{{ route('sale.index') }}">{{ __('Sales') }}</a>
-                                    <a class="dropdown-item" href="{{ route('customer.index') }}">{{ __('Customers') }}</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ route('repo.index') }}">{{ __('Report') }}</a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Stock</a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="{{ route('stock.index') }}">{{ __('Stock') }}</a>
-                                    <a class="dropdown-item" href="{{ route('item.index') }}">{{ __('Items') }}</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ url('lorryinfo') }}">{{ __('Lorry Info') }}</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('store.index') }}">{{ __('Store') }}</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                            @can('create-vouchers')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('customerlist') }}">Vouchers</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">List</a>
+                                </li>
+                            @endcan
+                            @can('manage-users')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sales</a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{ route('sale.index') }}">{{ __('Sales') }}</a>
+                                        <a class="dropdown-item" href="{{ route('customer.index') }}">{{ __('Customers') }}</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ route('repo.index') }}">{{ __('Report') }}</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Stock</a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{ route('stock.index') }}">{{ __('Stock') }}</a>
+                                        <a class="dropdown-item" href="{{ route('item.index') }}">{{ __('Items') }}</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ url('lorryinfo') }}">{{ __('Lorry Info') }}</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('store.index') }}">{{ __('Store') }}</a>
+                                </li>
+                            @endcan
+                            
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        {{ Auth::user()->name }} <span class="caret"></span>
                                     </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                                        document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+                                        @can('manage-users')
+                                        <a class="dropdown-item" href="{{ route('admin.users.index') }}">
+                                            {{ __('User Management') }}
+                                        </a>
+                                        @endcan
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </div>
+                                </li>
                         @endguest
                     </ul>
                 </div>
@@ -158,15 +172,15 @@
             @yield('content')
         </main>
         <div class="loader-wrapper">
-        <div class="text-center">
-        <div class="spinner-grow spinner-grow-sm mb-2" role="status">
+            <div class="text-center">
+                <div class="spinner-grow spinner-grow-sm mb-2" role="status">
+                </div>
+                <div class="spinner-grow" role="status">
+                </div>
+                <div class="spinner-grow spinner-grow-sm mb-2" role="status">
+                </div>
+            </div>
         </div>
-        <div class="spinner-grow" role="status">
-        </div>
-        <div class="spinner-grow spinner-grow-sm mb-2" role="status">
-        </div>
-        </div>
-    </div>
     </div>
 </body>
 </html>

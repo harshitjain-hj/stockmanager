@@ -20,17 +20,17 @@
             <div class="card">
                 <div class="card-header">
                     <?php $items = json_decode( $items, true ); ?>
-                    <?php 
-                        $key = array_search($repo['item_id'], array_column($items, 'id'));
-                        $item_name = $items[$key]['name'];
-                        // dd($repo['item_id']);
-                    ?>
+                    
                     <nav class="nav nav-pills nav-fill lead">
                         <li class="nav-item nav-link">Customer Name: <span class="text-dark font-weight-bold">{{$repo['name']}}</span></li>
-                        <li class="nav-item nav-link">Item Name: <span class="text-dark font-weight-bold">{{$item_name}}</span></li>
                         <li class="nav-item nav-link">Total Amount: <span class="text-primary font-weight-bold">{{$repo['total_amount']}}</span></li>
                         <li class="nav-item nav-link">Remain Amount: <span class="text-danger font-weight-bold">{{$repo['remain_amount']}}</span></li>
-                        <li class="nav-item nav-link">Remain Assets: <span class="text-danger font-weight-bold">{{$repo['remain_assets']}}</span></li>
+                        <li class="nav-item nav-link">Remain Assets: <span class="text-danger font-weight-bold">
+                            @foreach(json_decode($repo['remain_assets'], true) as $item)
+                                {{$item['asset_remain']}}
+                                &nbsp;
+                            @endforeach
+                            </span></li>
                         <li class="nav-item nav-link">
                             <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#repo_{{$repo['id']}}">Hard Modify</button>
                         </li>
@@ -71,26 +71,30 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-row justify-content-center">
-                                                <div class="form-group col-3">
-                                                    <label for="remain_assets" class="col-form-label text-md-right">Remain Assets</label>
-                                                </div>
-                                                <div class="form-group col-4">
-                                                    <input type="text" class="form-control" value="{{ $repo['remain_assets'] }}" disabled>                                                
-                                                </div>
-                                                <div class="form-group col-1 px-0">
-                                                    <img src="{{ URL::asset('images/arrow-right.png')}}" alt="Delete" style="height: 30px; width: 30px; display: block; margin: auto;">                           
-                                                </div>
-                                                <div class="form-group col-4">
-                                                    <input id="remain_assets" type="text" class="form-control @error('remain_assets') is-invalid @enderror" name="remain_assets" value="{{ $repo['remain_assets'] }}" required autocomplete="remain_assets">
+                                            @foreach(json_decode($repo['remain_assets'], true) as $item)
+                                                <?php $key = array_search($item['asset_id'], array_column($items, 'id')); ?>
+                                                <div class="form-row justify-content-center">
+                                                    <div class="form-group col-3">
+                                                        <label for="remain_assets" class="col-form-label text-md-right">Remain {{ $items[$key]['name'] }} {{ $items[$key]['sku'] }}</label>
+                                                    </div>
+                                                    <div class="form-group col-4">
+                                                        <input type="text" class="form-control" value="{{ $item['asset_remain'] }}" disabled>                                                
+                                                    </div>
+                                                    <div class="form-group col-1 px-0">
+                                                        <img src="{{ URL::asset('images/arrow-right.png')}}" alt="Delete" style="height: 30px; width: 30px; display: block; margin: auto;">                           
+                                                    </div>
+                                                    <div class="form-group col-4">
+                                                        <input type="hidden" name="asset[{{$item['asset_id']}}][asset_id]" value="{{ $item['asset_id'] }}">
+                                                        <input id="remain_assets" type="text" class="form-control @error('remain_assets') is-invalid @enderror" name="asset[{{$item['asset_id']}}][asset_remain]" value="{{ $item['asset_remain'] }}" required autocomplete="remain_assets">
 
-                                                    @error('remain_assets')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
+                                                        @error('remain_assets')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endforeach
 
                                         </div>
                                         <div class="modal-footer">

@@ -19,18 +19,12 @@ class CustomerRepoController extends Controller
 {
     public function index(Request $request)
     {
-        $item_id = '';
-        $item_id = $request->item;
-        if(!empty($item_id)) {
-            $repos =  DB::table('customer_repos')->where('item_id', $item_id)->join('customers', 'customer_repos.customer_id', 'customers.id')->orderBy('remain_amount', 'desc')->get(array('customer_repos.*', 'customers.name'));
-        }
-        else{
-            $repos =  DB::table('customer_repos')->join('customers', 'customer_repos.customer_id', 'customers.id')->orderBy('remain_amount', 'desc')->get(array('customer_repos.*', 'customers.name'));
-        }
-
-        $customers = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
-        $items = Item::select('id', 'name', 'sku')->get();
-        return view('report.index', compact('repos', 'customers', 'items'));
+        $repos =  DB::table('customer_repos')
+                        ->join('customers', 'customer_repos.customer_id', 'customers.id')
+                        ->orderBy('remain_amount', 'desc')
+                        ->get(array('customer_repos.*', 'customers.name'));
+        $items = Item::select('id', 'name', 'sku')->where('asset', '1')->get();
+        return view('report.index', compact('repos', 'items'));
     }
 
     public function create()
@@ -98,12 +92,18 @@ class CustomerRepoController extends Controller
     {
         $repo = request()->validate([
             'remain_amount' => 'required|numeric',
-            'remain_assets' => 'required|numeric',
         ]);   
+        $asset_array = [];
+        if (isset($request['asset'])) {
+            foreach($request['asset'] as $asset){
+                array_push($asset_array, $asset);
+            }
+        }
+        
         // dd(CustomerRepo::where('id', $id)->first());
         CustomerRepo::where('id', $id)->update([
             'remain_amount' => $repo['remain_amount'],
-            'remain_assets' => $repo['remain_assets'],
+            'remain_assets' => json_encode($asset_array),
         ]);
         return redirect()->route('repo.show', $id)->with('success', 'Updated successfully!');
     }
@@ -112,4 +112,49 @@ class CustomerRepoController extends Controller
     {
         //
     }
+
+    // public function rectify(Request $request) {
+    //     $persons =  DB::table('customer_repos')
+    //                     ->join('customers', 'customer_repos.customer_id', 'customers.id')
+    //                     ->groupBy('customer_id')
+    //                     ->get(array('customer_repos.*', 'customers.name'));
+
+    //     foreach($persons as $person) {
+    //         echo $person->customer_id;
+    //         $repos  = DB::table('customer_repos')
+    //         ->orderBy('item_id', 'asc')
+    //         ->orderBy('id', 'asc')
+    //         ->where('customer_id', $person->customer_id)
+    //         ->get();
+    //         // dd($repos);
+    //         $total_amount = 0;
+    //         $remain_amount = 0;
+    //         foreach($repos as $repo) {
+    //             $total_amount = $total_amount + $repo->total_amount;
+    //             $remain_amount = $remain_amount + $repo->remain_amount;
+    //         }
+    //         if($repos[0]->item_id == '1') {
+    //             $remain_assets = json_encode([[
+    //                 'asset_id' => '1',
+    //                 'asset_remain' => $repos[0]->remain_assets
+    //             ]]);
+    //         } else {
+    //             $remain_assets = json_encode([]);
+    //         }
+    //         // update the first repo
+    //         DB::table('customer_repos')->where('id', $repos[0]->id)->update([
+    //             'item_id' => "1",
+    //             'total_amount' => $total_amount,
+    //             'remain_amount' => $remain_amount,
+    //             'remain_assets' => $remain_assets,
+    //         ]);
+
+    //         // deleting the rest report if any
+    //         for ($i=1; $i<count($repos) ; $i++) { 
+    //             DB::table('customer_repos')->where('id', $repos[$i]->id)->delete();
+    //         }
+    //         echo "done";
+    //     }
+    //     echo "Completed";
+    // }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImageToVouchers extends Migration
+class CreateRoleUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddImageToVouchers extends Migration
      */
     public function up()
     {
-        Schema::table('vouchers', function (Blueprint $table) {
-            $table->string('image')->nullable();
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('role_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddImageToVouchers extends Migration
      */
     public function down()
     {
-        Schema::table('vouchers', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('role_user');
     }
 }

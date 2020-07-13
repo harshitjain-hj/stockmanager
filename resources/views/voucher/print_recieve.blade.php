@@ -38,6 +38,7 @@
     </style>
 </head>
 <body>
+    <?php $voucher['asset_data'] = json_decode($voucher['asset_data']);?>
     <div id="invoice-POS" style="box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); width: 58mm; background: #FFF; margin: auto; margin-top: 25px;">
         <p class="my-0">&nbsp;</p>
         <center>
@@ -48,46 +49,6 @@
             <div class="col-9 text-right">{{date('d-M | H:i', strtotime($voucher['created_at']))}}</div>
         </div>
         <center class="font-weight-bolder">{{$customer['name']}}</center>
-        <p class="my-0" style="height: 16px;">&nbsp;</p>
-        <center class="font-weight-bold">Sale</center>
-        <p class="my-0" style="height: 16px;">&nbsp;</p>
-        <?php $voucher['item_data'] = json_decode($voucher['item_data']);?>
-        <?php $voucher['asset_data'] = json_decode($voucher['asset_data']);?>
-        <?php 
-            $amount = 0; 
-            $asset = 0;
-        ?>
-        <table class="table table-borderless table-sm m-0">
-            <thead>
-                <tr>
-                    <th scope="col" class="py-0">ITEM</th>
-                    <th scope="col" class="py-0">QTY</th>
-                    <th scope="col"class="text-right py-0">RATE</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($voucher['item_data'] as $item)
-                <tr>
-                    <td class="py-0">{{explode('#', $item->info)[1]}}</td>
-                    <td class="py-0">{{$item->qty}}</td>
-                    <td class="text-right py-0">{{$item->rate}}</td>
-                </tr>
-                <?php 
-                    $amount = $amount + ($item->rate * $item->qty);
-                    $type = explode('#', $item->info)[3];
-                    $asset = $asset + ($type * $item->qty);
-                ?>
-                @endforeach
-                <tr>
-                    <th scope="row" class="py-0">Total Amt.</td>
-                    <th scope="row" class="text-right py-0" colspan="2">&#x20B9; {{$amount}}</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="py-0">Total Asset</td>
-                    <th scope="row" class="text-right py-0" colspan="2">{{$asset}}</td>
-                </tr>
-            </tbody>
-        </table>
         @if($voucher['asset_data'] || $voucher['amount_recieved'])
             @if($voucher['asset_data'][0]->recieved !== NULL || $voucher['amount_recieved'])
                 <p class="my-0" style="height: 16px;">&nbsp;</p>
@@ -134,44 +95,6 @@
             <div class="col-9 text-right">{{date('d-M | H:i', strtotime($voucher['created_at']))}}</div>
         </div>
         <center class="font-weight-bolder">{{$customer['name']}}</center>
-        <p class="my-0" style="height: 15px;">&nbsp;</p>
-        <center class="font-weight-bold">Sale</center>
-        <p class="my-0" style="height: 15px;">&nbsp;</p>
-        <?php 
-            $amount = 0; 
-            $asset = 0;
-        ?>
-        <table class="table table-borderless table-sm m-0">
-            <thead>
-                <tr>
-                    <th scope="col" class="py-0">ITEM</th>
-                    <th scope="col" class="py-0">QTY</th>
-                    <th scope="col"class="text-right py-0">RATE</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($voucher['item_data'] as $item)
-                <tr>
-                    <td class="py-0">{{explode('#', $item->info)[1]}}</td>
-                    <td class="py-0">{{$item->qty}}</td>
-                    <td class="text-right py-0">{{$item->rate}}</td>
-                </tr>
-                <?php 
-                    $amount = $amount + ($item->rate * $item->qty);
-                    $type = explode('#', $item->info)[3];
-                    $asset = $asset + ($type * $item->qty);
-                ?>
-                @endforeach
-                <tr>
-                    <th scope="row" class="py-0">Total Amt.</td>
-                    <th scope="row" class="text-right py-0" colspan="2">&#x20B9; {{$amount}}</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="py-0">Total Asset</td>
-                    <th scope="row" class="text-right py-0" colspan="2">{{$asset}}</td>
-                </tr>
-            </tbody>
-        </table>
         @if($voucher['asset_data'] || $voucher['amount_recieved'])
             @if($voucher['asset_data'][0]->recieved !== NULL || $voucher['amount_recieved'])
                 <p class="my-0" style="height: 16px;">&nbsp;</p>

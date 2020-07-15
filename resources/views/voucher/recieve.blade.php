@@ -22,7 +22,13 @@
                         </div>
                         <div class="col">
                             <p class="m-0">Pending Asset</p>
-                            <h4 id="asset_remain">{{$customer->remain_assets}}</h4>
+							<h6>
+							@foreach(json_decode($customer->remain_assets, true) as $item)
+								<?php $key = array_search($item['asset_id'], array_column(json_decode($items), 'id')); ?>
+								<span id="actual_asset_remain_{{$item['asset_id']}}" style="display: none">{{$item['asset_remain']}}</span>
+                            	{{ $items[$key]['name'] }} {{ $items[$key]['sku'] }}-<h4 id="asset_remain_{{$item['asset_id']}}">{{$item['asset_remain']}}</h4>
+							@endforeach
+							</h6>
                         </div>
                     </div>
                 </div>
@@ -31,7 +37,7 @@
                         <div class="card p-1 card-body">
                             <div class="row">
                                 <div class="col-4">
-                                    <img src="{{ URL::asset('images/rupee.png')}}" class="card-img" style="max-width: 75%;" align="right">
+                                    <img src="{{ URL::asset('images/rupee.png')}}" class="card-img" style="max-width: 65%;" align="right">
                                 </div>
                                 <div class="col-8 p-1 text-center" style="margin:auto;">
                                     <div class="px-1 form-inline d-flex justify-content-start">
@@ -39,7 +45,7 @@
                                         <input type="text" name="recieved_amount" style="height: 60px; width: 150px; font-size: 30pt; border-color: #ffffff00;" autocomplete="off" onkeyup="amount(this)" class="form-control p-0" inputmode="numeric" pattern="[0-9]*" placeholder="Amount">
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -72,7 +78,7 @@
                                                         <p class="align-bottom m-0" style="height: 0px;">{{$item->sku}}(s)</p>
                                                     </div>
                                                 </div>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +93,7 @@
 </div>
 
 <script>
-    function show_hide(element) {        
+    function show_hide(element) {
         var x = document.getElementById("hide_"+element.id);
         var y = document.getElementById("show_"+element.id);
         if (x.style.display === "none") {
@@ -97,7 +103,7 @@
             x.style.display = "none";
             y.style.display = "block";
             document.getElementsByClassName(element.id)[0].focus();
-        }        
+        }
         $('html,body').animate({
         scrollTop: $("#"+element.id).offset().top - 60},
         'slow');
@@ -106,15 +112,17 @@
 
 <script type="text/javascript">
     function amount(element) {
-        var value = element.value;        
+        var value = element.value;
         document.getElementById('amt_remain').innerHTML = {{$customer->remain_amount}} - value;
     }
 </script>
 
 <script type="text/javascript">
     function asset(element) {
-        var value = element.value;        
-        document.getElementById('asset_remain').innerHTML = {{$customer->remain_assets}} - value;
+        var value = element.value;
+		var asset_id = element.className;
+		var actual = document.getElementById('actual_asset_remain_'+asset_id.replace('form-control p-0 ','')).innerHTML
+        document.getElementById('asset_remain_'+asset_id.replace('form-control p-0 ','')).innerHTML = actual - value;
     }
 </script>
 

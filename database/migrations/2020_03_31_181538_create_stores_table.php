@@ -27,7 +27,7 @@ class CreateStoresTable extends Migration
             $table->text('lorry_no')->nullable();
             $table->unsignedInteger('remain_qty');
             $table->unsignedBigInteger('payable_amount');
-            $table->text('status')->default('Stored');
+            $table->text('status')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

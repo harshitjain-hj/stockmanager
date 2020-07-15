@@ -49,7 +49,7 @@ class CustomerRepoController extends Controller
             $sales =  DB::table('sales')
                         ->where('customer_id', $repo->customer_id)
                         // ->whereIn('bill_no', $number)
-                        ->whereBetween('bill_no', array(1,2000))
+                        ->whereBetween('bill_no', array(1000,1500))
                         ->join('customers', 'sales.customer_id', 'customers.id')
                         ->orderBy('bill_no', 'desc')
                         ->get(array('sales.*', 'customers.name'));
@@ -79,7 +79,7 @@ class CustomerRepoController extends Controller
             // dd($sales);
         }
 
-        
+
         return view('report.show', compact('repo', 'items', 'sales'));
     }
 
@@ -92,14 +92,14 @@ class CustomerRepoController extends Controller
     {
         $repo = request()->validate([
             'remain_amount' => 'required|numeric',
-        ]);   
+        ]);
         $asset_array = [];
         if (isset($request['asset'])) {
             foreach($request['asset'] as $asset){
                 array_push($asset_array, $asset);
             }
         }
-        
+
         // dd(CustomerRepo::where('id', $id)->first());
         CustomerRepo::where('id', $id)->update([
             'remain_amount' => $repo['remain_amount'],
@@ -150,7 +150,7 @@ class CustomerRepoController extends Controller
     //         ]);
 
     //         // deleting the rest report if any
-    //         for ($i=1; $i<count($repos) ; $i++) { 
+    //         for ($i=1; $i<count($repos) ; $i++) {
     //             DB::table('customer_repos')->where('id', $repos[$i]->id)->delete();
     //         }
     //         echo "done";

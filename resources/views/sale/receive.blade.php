@@ -41,7 +41,7 @@
 						   <label for="item_id" class="col-md-4 col-form-label text-md-right">Item Name</label>
 						   <div class="col-md-6">
 							   <select class="form-control" id="item_id" name="item_id" value="{{ old('item_id') }}">
-								   <option selected>Choose item...</option>
+								   <option selected value="0">Default (No asset)</option>
 									@foreach ($items as $item)
 		 								<option name="item_id" <?php echo ($item['id'] == old('item_id') ? 'selected' : '' )?> value="{{ $item['id'] }}">{{ $item['name'] }}</option>
 		 							@endforeach
@@ -52,7 +52,7 @@
                                     <input id="qty" type="hidden" class="form-control @error('qty') is-invalid @enderror" name="qty" value="0" autocomplete="qty">
                                     <input id="amount" type="hidden" class="form-control @error('amount') is-invalid @enderror" name="amount" value="0" autocomplete="amount">
 
-                        
+
                         <div class="form-group row">
                             <label for="bill_date" class="col-md-4 col-form-label text-md-right">Bill date</label>
 

@@ -10,8 +10,10 @@ Auth::routes();
 
 // for employee + admin users
 Route::middleware('can:create-vouchers')->group(function(){
+	Route::get('/voucherlist', 'Voucher\VoucherController@index')->name('voucherlist');
     Route::get('/customerlist', 'Voucher\VoucherController@customerList')->name('customerlist');
     Route::get('/customerlist/{id}', 'Voucher\VoucherController@option')->name('option');
+	Route::post('/voucher/{id}/verified', 'Voucher\VoucherController@verified')->name('verified');
     // sales
     Route::get('/customerlist/{id}/sale', 'Voucher\VoucherController@sale')->name('option.sale');
     Route::post('/customerlist/{id}/generatesale', 'Voucher\VoucherController@generatesale')->name('generate.sale');
@@ -43,12 +45,12 @@ Route::middleware('can:manage-users')->group(function(){
         // All customer routes
         Route::resource('/customer', 'Sale\CustomerController')->middleware('auth');
 
-        // All sales routes 
+        // All sales routes
         Route::get('/sale/receive', 'Sale\SaleController@receive')->name('sale.receive')->middleware('auth');
         Route::get('/sale/delete/{id}', 'Sale\SaleController@destroy')->name('sale.delete')->middleware('auth');
         Route::resource('/sale', 'Sale\SaleController')->middleware('auth');
 
-        // All customer report routes 
+        // All customer report routes
         Route::resource('/repo', 'Sale\CustomerRepoController')->middleware('auth');
 
     // Store Routes

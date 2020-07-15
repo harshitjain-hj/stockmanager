@@ -25,7 +25,7 @@ class HomeController extends Controller
                     ->where('bill_date', '>=', date('Y-m-d',strtotime("-30 days")))
                     ->where('item_id', $item['item_id'])
                     ->whereNotBetween('bill_no', array(1,2001))
-                    ->groupBy('bill_date', 'name')
+                    ->groupBy('bill_date')
                     ->get();
 
             if($sales->isEmpty()) {
@@ -37,11 +37,11 @@ class HomeController extends Controller
                 ];
                 $sales = [(object) $result];
             }
-            
+
             $item['sales'] = $sales;
             // dd($sales);
         }
-        
+
         return view('home', compact('items'));
     }
 }

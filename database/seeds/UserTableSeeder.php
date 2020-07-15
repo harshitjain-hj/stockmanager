@@ -14,7 +14,9 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        User::truncate();
+		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+		User::truncate();
+		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         DB::table('role_user')->truncate();
 
         $adminRole = Role::where('name', 'admin')->first();

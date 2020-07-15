@@ -18,15 +18,15 @@
             var dataType = 'application/vnd.ms-excel';
             var tableSelect = document.getElementById(tableID);
             var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-            
+
             // Specify file name
             filename = filename?filename+'.xls':'excel_data.xls';
-            
+
             // Create download link element
             downloadLink = document.createElement("a");
-            
+
             document.body.appendChild(downloadLink);
-            
+
             if(navigator.msSaveOrOpenBlob){
                 var blob = new Blob(['\ufeff', tableHTML], {
                     type: dataType
@@ -35,10 +35,10 @@
             }else{
                 // Create a link to the file
                 downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-            
+
                 // Setting the file name
                 downloadLink.download = filename;
-                
+
                 //triggering the function
                 downloadLink.click();
             }
@@ -46,11 +46,11 @@
     </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -75,7 +75,7 @@
             $(".loader-wrapper").fadeOut("slow");
         });
     </script>
-    
+
 </head>
 <body class="bg-dark">
     <div id="app">
@@ -86,7 +86,7 @@
                 </button>
                 <a class="navbar-brand mx-3" href="#">Manage</a>
                 <!-- <button class="btn btn-outline-info" id="spcl-btn">Hagd</button> -->
-                <label for="submit-form" class="btn btn-outline-success mb-0" id="spcl-btn" tabindex="0" style="visibility:hidden;">Submit</label>
+                <label for="submit-form" class="btn btn-outline-success mb-0" id="spcl-btn" tabindex="0" style="visibility:hidden;"></label>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
@@ -112,7 +112,7 @@
                                     <a class="nav-link" href="{{ route('customerlist') }}">Vouchers</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">List</a>
+                                    <a class="nav-link" href="{{ route('voucherlist') }}">List</a>
                                 </li>
                             @endcan
                             @can('manage-users')
@@ -141,7 +141,7 @@
                                     <a class="nav-link" href="{{ route('store.index') }}">{{ __('Store') }}</a>
                                 </li>
                             @endcan
-                            
+
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         {{ Auth::user()->name }} <span class="caret"></span>

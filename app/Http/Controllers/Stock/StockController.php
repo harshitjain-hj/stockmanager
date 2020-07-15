@@ -47,7 +47,7 @@ class StockController extends Controller
     public function store(Request $request)
     {
         $lorry_info = request()->validate([
-            'item_id' => 'required|numeric|unique:items',
+            'item_id' => 'required|numeric',
             'created_at' => 'required|date',
             'total_weight' => 'required|numeric',
             'arrived_unit' => 'required|numeric',
@@ -58,9 +58,7 @@ class StockController extends Controller
             'lorry_no' => 'string|nullable',
             'unit_returned' => 'nullable|numeric',
         ]);
-
-        $stock = Stock::where(['item_id'=> $lorry_info['item_id']])->select('unit_remain', 'updated_at')->first();
-        // dd($stock);
+        $stock = Stock::where('item_id', $lorry_info['item_id'])->select('unit_remain', 'updated_at')->first();
         if(empty($stock)) {
             $stockcreationdata = ([
                 'item_id' => $lorry_info['item_id'],
@@ -77,7 +75,7 @@ class StockController extends Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
         }
-        
+
         $lorry_info = new LorryInfo($lorry_info);
         $lorry_info->save();
         return redirect('/lorryinfo');

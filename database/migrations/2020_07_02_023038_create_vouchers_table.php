@@ -22,7 +22,8 @@ class CreateVouchersTable extends Migration
             $table->json('asset_data')->nullable();
             $table->unsignedInteger('total_amount')->nullable();
             $table->unsignedInteger('amount_recieved')->nullable();
-            $table->json('assets_recieved')->nullable();
+			$table->text('status')->nullable();
+            $table->text('bill_no')->nullable();
             $table->json('outstanding')->nullable();
             $table->text('remark')->nullable();
         });

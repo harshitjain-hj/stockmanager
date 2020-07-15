@@ -1,7 +1,7 @@
 {
     "short_name": "Manager App",
     "name": "Manage",
-    "start_url": "/login",
+    "start_url": "/",
     "theme_color": "#FFE1C4",
     "background_color": "#FFE9D2",
     "display": "standalone",

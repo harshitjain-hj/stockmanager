@@ -146,10 +146,6 @@
         <p class="my-0">&nbsp;</p>
     </div>
 
-    <!-- <div class="d-flex hidden-print justify-content-center fixed-bottom mx-3 py-3">
-        <a href="{{ route('customerlist') }}" class="btn mx-4 btn-danger ">HOME</a>
-        <button id="btnPrint" class="btn mx-4 btn-warning">Print</button>
-    </div> -->
     <div class="container hidden-print d-flex my-4 fixed-bottom justify-content-center">
         <div class="col-md-4 d-flex justify-content-around align-self-center">
             <a href="{{ route('customerlist') }}" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure?')">HOME</a>

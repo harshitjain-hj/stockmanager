@@ -114,6 +114,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('voucherlist') }}">List</a>
                                 </li>
+								<li class="nav-item">
+                                    <a class="nav-link" href="{{ route('summary') }}">Summary</a>
+                                </li>
                             @endcan
                             @can('manage-users')
                                 <li class="nav-item">

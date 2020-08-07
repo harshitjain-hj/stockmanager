@@ -223,12 +223,12 @@
     </div>
 </body>
 <script>
-    // if(window.print) {
-    //     window.print();
-    // }
-    // const $btnPrint = document.querySelector("#btnPrint");
-    // $btnPrint.addEventListener("click", () => {
-    //     window.print();
-    // });
+    if(window.print) {
+        window.print();
+    }
+    const $btnPrint = document.querySelector("#btnPrint");
+    $btnPrint.addEventListener("click", () => {
+        window.print();
+    });
 </script>
 </html>

@@ -18,11 +18,11 @@ class CreateSalesTable extends Migration
             $table->unsignedBigInteger('bill_no');
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('item_id');
-            $table->unsignedTinyInteger('qty');
+            $table->unsignedInteger('qty');
             $table->unsignedInteger('amount');
             $table->unsignedInteger('total_amount');
             $table->unsignedInteger('given_amount')->nullable();
-            $table->unsignedTinyInteger('given_assets')->nullable();
+            $table->unsignedInteger('given_assets')->nullable();
             $table->date('bill_date');
             $table->text('description')->nullable();
             $table->timestamps();

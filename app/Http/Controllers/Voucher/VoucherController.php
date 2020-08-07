@@ -10,30 +10,35 @@ use App\Item;
 use App\CustomerRepo;
 use App\Voucher;
 use App\Sale;
+use App\Stock;
 
 use DB;
+use Carbon\Carbon;
 
 class VoucherController extends Controller
 {
-
 	public function index()
     {
 		$sales = Voucher::where('voucher_type', 'Sale')
 							->select('vouchers.id as V.ID', 'customers.name', 'item_data as item','total_amount as total', 'asset_data as asset', 'amount_recieved as amt. recieved', 'remark')
 							->join('customers', 'vouchers.customer_id', 'customers.id')
 							->orderBy('vouchers.created_at', 'desc')
+							->whereDate('vouchers.created_at', Carbon::today())
 							->get();
 		$recievings = Voucher::where('voucher_type', 'Recieve')
 							->select('vouchers.id as V.ID', 'customers.name', 'asset_data as asset', 'amount_recieved as amt. recieved', 'remark')
 							->join('customers', 'vouchers.customer_id', 'customers.id')
 							->orderBy('vouchers.created_at', 'desc')
+							->whereDate('vouchers.created_at', Carbon::today())
 							->get();
 		$unverified = Voucher::where('status', NULL)
 							->select('vouchers.id as V.ID', 'customers.name', 'voucher_type', 'item_data as item','total_amount as total', 'asset_data as asset', 'amount_recieved as amt. recieved', 'remark')
 							->join('customers', 'vouchers.customer_id', 'customers.id')
 							->get();
+
 		$bill_no = Sale::select('bill_no')
-                    ->whereNotBetween('bill_no', array(1000,2000))
+                    // ->whereNotBetween('bill_no', array(1000,2000))
+					->where('bill_no', 'regexp', '^[A-Z]')
                     ->latest()
                     ->first();
         $sale_bill_no = "Sale";
@@ -41,7 +46,8 @@ class VoucherController extends Controller
             $sale_bill_no = preg_replace("/[^A-Za-z ]/", '', $bill_no['bill_no']) . (preg_replace("/[^0-9 ]/", '', $bill_no['bill_no'])+1);
         }
 		$bill_no = Sale::select('bill_no')
-                    ->whereBetween('bill_no', array(1000,2000))
+                    // ->whereBetween('bill_no', array(1000,2000))
+					->where('bill_no', 'regexp', '^[0-9]')
                     ->latest()
                     ->first();
         $recieve_bill_no = "Recieve";
@@ -67,7 +73,7 @@ class VoucherController extends Controller
     public function sale($id)
     {
         $customer = Customer::select('id', 'name')->findOrFail($id);
-        $items = Item::select('id', 'name', 'sku', 'image', 'asset')->get();
+        $items = Item::select('id', 'name', 'sku', 'image', 'asset')->whereNotBetween('id', [2, 5])->get();
         return view('voucher.sale', compact('items', 'customer'));
     }
 
@@ -174,6 +180,9 @@ class VoucherController extends Controller
 		$bill = [
 			'bill_no' => $request['bill_no'],
 			'customer_id' => $voucher_det['customer_id'],
+			'qty' => 0,
+			'amount' => 0,
+			'total_amount' => 0,
 			'bill_date' => $voucher_det['created_at']->format('Y-m-d'),
 			'given_amount' => $voucher_det['amount_recieved'],
 			'description' => $voucher_det['remark'],
@@ -198,6 +207,7 @@ class VoucherController extends Controller
 		} // for cash + asset recieve
 		elseif ($voucher_det['asset_data']) {
 			foreach (json_decode($voucher_det['asset_data'], true) as $key => $value) {
+				$bill['item_id'] = $value['id'];
 				$bill['given_assets'] = $value['recieved'];
 
 				// print("<pre>".print_r($bill,true)."</pre>");
@@ -216,6 +226,7 @@ class VoucherController extends Controller
 
 
 		foreach ($bills as $saledata) {
+			// dd($saledata);
 			$customer_repo = CustomerRepo::where('customer_id', $saledata['customer_id'])->select('total_amount', 'remain_amount', 'remain_assets')->first();
 
 	        $asset_status = Item::where('id', $saledata['item_id'])->select('asset')->first();
@@ -269,8 +280,57 @@ class VoucherController extends Controller
 	        $sale = new Sale($saledata);
 	        $sale->save();
 		}
-
+		$voucher_det->update(['status' => 'Verified', 'bill_no' => $request['bill_no']]);
 		return redirect()->route('voucherlist')->with('success', 'Updated!');
+	}
+
+	public function rejected(Request $request, $id)
+	{
+		$voucher_det->update(['status' => 'Rejected']);
+	}
+
+	public function summary()
+	{
+		$customers = Voucher::where('status', NULL)->orWhere('status', 'Verified')
+							->whereDate('vouchers.created_at', Carbon::today())
+							->join('customers', 'vouchers.customer_id', 'customers.id')
+							->groupBy('customer_id')
+							->get();
+
+		$summary = [];
+		foreach ($customers as $customer) {
+			$records = Voucher::where('customer_id', $customer['customer_id'])
+								// ->where('status', NULL)
+								// ->orWhere('status', 'Verified')
+								// ->whereIn('status',[NULL, 'Verified'])
+								->whereDate('vouchers.created_at', Carbon::today())
+								->get();
+			$details = [
+				'customer_name' => $customer['name'],
+				'total_amount' => 0,
+				'asset_data' => [],
+				'recieved_amount' => 0,
+			];
+			foreach ($records as $record) {
+
+				$details['total_amount'] = $details['total_amount'] + $record['total_amount'];
+				$details['recieved_amount'] = $details['recieved_amount'] + $record['amount_recieved'];
+				foreach (json_decode($record['asset_data'], true) as $asset) {
+					$found = array_search($asset['id'], array_column($details['asset_data'], 'id'));
+					if ($found === false) {
+						array_push($details['asset_data'], $asset);
+					} else {
+						$details['asset_data'][$found]['sent'] = $details['asset_data'][$found]['sent'] + $asset['sent'];
+						$details['asset_data'][$found]['recieved'] = $details['asset_data'][$found]['recieved'] + $asset['recieved'];
+					}
+				}
+			}
+			// print("<pre>".print_r($details,true)."</pre>");
+			array_push($summary, $details);
+		}
+
+		// dd($summary);
+		return view('voucher.summary', compact('summary'));
 	}
 
     public function create()

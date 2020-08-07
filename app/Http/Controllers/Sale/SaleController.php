@@ -26,14 +26,12 @@ class SaleController extends Controller
         $char = $request->character;
         // if(DB::table('sales')->count()) {
             if($char == 'bill') {
-                // $char = 'A';
-                // $number = range(600,1000);
-                // dd($number);
                 $sales =  DB::table('sales')
                             // ->whereIn('bill_no', $number)
-                            ->whereBetween('bill_no', array(1000,2001))
+                            // ->whereBetween('bill_no', array(1000,2001))
+							->where('bill_no', 'regexp', '^[0-9]')
                             ->join('customers', 'sales.customer_id', 'customers.id')
-                            ->orderBy('bill_no', 'desc')
+                            ->orderBy('created_at', 'desc')
                             ->select(array('sales.*', 'customers.name'))->get();
                 // dd($sales);
             } elseif ($request->path() == 'sale' && empty($char)) {
@@ -62,8 +60,9 @@ class SaleController extends Controller
     {
         // $number = range(700, 998);
         $id = Sale::select('bill_no')
-                    ->whereNotBetween('bill_no', array(1000,2000))
+                    // ->whereNotBetween('bill_no', array(1000,2000))
                     // ->whereNotIn('bill_no', $number)
+					->where('bill_no', 'regexp', '^[A-Z]')
                     ->latest()
                     ->first();
         $bill_no = "Bill No";
@@ -83,8 +82,9 @@ class SaleController extends Controller
         // $number = range(800, 1200);
         $id = Sale::select('bill_no')
 					// TODO: should be dynamic
-                    ->whereBetween('bill_no', array(1000,2001))
-                    ->orderBy('bill_no', 'desc')
+                    // ->whereBetween('bill_no', array(1000,2001))
+					->where('bill_no', 'regexp', '^[0-9]')
+                    ->orderBy('created_at', 'desc')
                     ->first();
         $bill_no = "Bill No";
         if(!empty($id)){

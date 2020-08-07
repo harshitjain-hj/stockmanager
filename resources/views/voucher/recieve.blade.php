@@ -87,7 +87,7 @@
                     @endforeach
                 </div>
             </div>
-            <input type="submit" id="submit-form" style="visibility: hidden;"/>
+            <input type="submit" id="submit-form" name="add" style="visibility: hidden;"/>
         </div>
     </form>
 </div>

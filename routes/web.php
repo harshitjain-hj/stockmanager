@@ -14,6 +14,9 @@ Route::middleware('can:create-vouchers')->group(function(){
     Route::get('/customerlist', 'Voucher\VoucherController@customerList')->name('customerlist');
     Route::get('/customerlist/{id}', 'Voucher\VoucherController@option')->name('option');
 	Route::post('/voucher/{id}/verified', 'Voucher\VoucherController@verified')->name('verified');
+	Route::post('/voucher/{id}/rejected', 'Voucher\VoucherController@rejected')->name('rejected');
+	Route::get('/summary', 'Voucher\VoucherController@summary')->name('summary');
+
     // sales
     Route::get('/customerlist/{id}/sale', 'Voucher\VoucherController@sale')->name('option.sale');
     Route::post('/customerlist/{id}/generatesale', 'Voucher\VoucherController@generatesale')->name('generate.sale');

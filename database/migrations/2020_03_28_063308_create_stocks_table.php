@@ -16,7 +16,7 @@ class CreateStocksTable extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
-            $table->unsignedInteger('unit_remain');
+            $table->Integer('unit_remain');
             $table->timestamp('updated_at')->nullable();
         });
     }

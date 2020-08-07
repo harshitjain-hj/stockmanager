@@ -64,8 +64,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
-                                $amount = 0; 
+                            <?php
+                                $amount = 0;
                                 $asset = 0;
                             ?>
                             @foreach($item_array as $item)
@@ -74,7 +74,7 @@
                                     <td>{{$item['qty']}}</td>
                                     <td>&#x20B9; {{$item['rate']}}</td>
                                 </tr>
-                                <?php 
+                                <?php
                                     $amount = $amount + ($item['rate'] * $item['qty']);
                                     $type = explode('#', $item['info'])[3];
                                     $asset = $asset + ($type * $item['qty']);
@@ -141,19 +141,19 @@
                 <div class="card card-body p-1">
                     <input type="text" name="remark" style="height: 30px; font-size: 15pt; border-color: #ffffff00;" autocomplete="off" class="form-control p-0" placeholder="Remark">
                 </div>
-            
+
             <!-- <div class="fixed-bottom m-4 d-flex justify-content-end">
                 <button type="submit" name="add" class="btn btn-primary btn-lg">
                     <h2 class="m-0">Print</h2>
                 </button> -->
-                <input type="submit" id="submit-form" style="visibility: hidden;"/>
+                <input type="submit" id="submit-form" name="add" style="visibility: hidden;"/>
             <!-- </div> -->
         </div>
     </form>
 </div>
 
 <script>
-    function show_hide(element) {        
+    function show_hide(element) {
         var x = document.getElementById("hide_"+element.id);
         var y = document.getElementById("show_"+element.id);
         if (x.style.display === "none") {
@@ -163,7 +163,7 @@
             x.style.display = "none";
             y.style.display = "block";
             document.getElementsByClassName(element.id)[0].focus();
-        }        
+        }
         $('html,body').animate({
         scrollTop: $("#"+element.id).offset().top - 60},
         'slow');

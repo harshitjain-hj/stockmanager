@@ -49,9 +49,10 @@ class CustomerRepoController extends Controller
             $sales =  DB::table('sales')
                         ->where('customer_id', $repo->customer_id)
                         // ->whereIn('bill_no', $number)
-                        ->whereBetween('bill_no', array(1000,1500))
+                        // ->whereBetween('bill_no', array(1000,1500))
+						->where('bill_no', 'regexp', '^[0-9]')
                         ->join('customers', 'sales.customer_id', 'customers.id')
-                        ->orderBy('bill_no', 'desc')
+                        ->orderBy('created_at', 'desc')
                         ->get(array('sales.*', 'customers.name'));
         } elseif (!empty($char)) {
             $sales =  DB::table('sales')->where('customer_id', $repo->customer_id)->where('bill_no', 'LIKE', "%{$char}%")->join('customers', 'sales.customer_id', 'customers.id')->orderBy('bill_no', 'desc')->get(array('sales.*', 'customers.name'));
@@ -62,7 +63,8 @@ class CustomerRepoController extends Controller
             $pending = [];
             $sales = DB::table('sales')->where('customer_id', $repo->customer_id)
                 // ->whereNotIn('bill_no', $number)
-                ->whereNotBetween('bill_no', array(1,2001))
+                // ->whereNotBetween('bill_no', array(1,2001))
+				->where('bill_no', 'regexp', '^[A-Z]')
                 ->join('customers', 'sales.customer_id', 'customers.id')
                 ->orderBy('bill_date', 'desc')
                 ->orderBy('created_at', 'desc')

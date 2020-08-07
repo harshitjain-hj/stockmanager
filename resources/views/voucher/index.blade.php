@@ -5,7 +5,7 @@
 <?php $recievings = json_decode( $recievings, true ); ?>
 <?php $unverified = json_decode( $unverified, true ); ?>
 
-<div class="container">
+<div class="container bills">
     <div class="row justify-content-center">
 		<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 		  <li class="nav-item">
@@ -202,7 +202,7 @@
 		</div>
     </div>
 </div>
-// all the modals
+<!-- all the modals -->
 @foreach($unverified as $sale)
 	<div class="modal fade" id="sale{{$sale['V.ID']}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered" role="document">
@@ -227,8 +227,8 @@
 				  </div>
 			  </div>
 			  <div class="modal-footer d-flex justify-content-around">
-				  <button type="button" class="btn btn-danger">Reject</button>
-				  <button type="button" class="btn btn-warning">Edit</button>
+				  <!-- <form action="{{ route('rejected', $sale['V.ID']) }}" method="post"><button type="submit" class="btn btn-danger">Reject</button></form> -->
+				  <!-- <button type="button" class="btn btn-warning">Edit</button> -->
 				  <button type="submit" class="btn btn-success">Save to sale</button>
 			  </div>
 		  </form>

@@ -22,7 +22,7 @@
                     <div class="col px-1 mb-3">
                         <div class="card">
                             <button class="btn w-100 p-0" type="button" id="{{$item->id}}" aria-expanded="false" onclick="show_hide(this)">
-                                <img src="https://cdn3.iconfinder.com/data/icons/illustrated-vector-fruit-pack/600/banana_Icon-512.png" id="hide_{{$item->id}}" class="card-img" alt="...">
+                                <img src="{{ URL::asset('assetimages/'.$item->image.'.jpg')}}" id="hide_{{$item->id}}" class="card-img" alt="...">
                                 <div class="card-body p-2">
                                     <h5 class="card-title m-0">{{$item->name}}</h5>
                                 </div>
@@ -46,7 +46,7 @@
                                         <div class="d-flex justify-content-center">
                                             <h3 class="text-dark">Total :</h3>
                                             <h3 id="result_0{{$item->id}}">0</h3>
-                                        </div>    
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -58,14 +58,14 @@
                 <button type="submit" name="add" class="btn btn-primary btn-lg">
                     <h2 class="m-0">Checkout</h2>
                 </button> -->
-                <input type="submit" id="submit-form" style="visibility: hidden;"/>
+                <input type="submit" id="submit-form" name="add" style="visibility: hidden;"/>
             <!-- </div> -->
         </div>
     </form>
 </div>
 
 <script>
-    function show_hide(element) {        
+    function show_hide(element) {
         var x = document.getElementById("hide_"+element.id);
         var y = document.getElementById("show_"+element.id);
         if (x.style.display === "none") {
@@ -75,7 +75,7 @@
             x.style.display = "none";
             y.style.display = "block";
             document.getElementsByClassName(element.id)[0].focus();
-        }        
+        }
         $('html,body').animate({
         scrollTop: $("#"+element.id).offset().top - 60},
         'slow');
@@ -84,7 +84,7 @@
 
 <script type="text/javascript">
     function multiply(element) {
-        var values = document.getElementsByClassName(element.className);        
+        var values = document.getElementsByClassName(element.className);
         var result = values[0].value * values[1].value;
         document.getElementById("result_"+element.className.match(/\d/g).join("")).innerHTML = result;
     }

@@ -17,9 +17,9 @@ class CreateCustomerReposTable extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('total_amount');
+            $table->BigInteger('total_amount');
             $table->Integer('remain_amount');
-            $table->unsignedTinyInteger('remain_assets');
+            $table->Integer('remain_assets');
             $table->timestamps();
         });
     }

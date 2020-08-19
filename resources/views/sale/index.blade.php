@@ -20,30 +20,26 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-around">
                     <div class="row">
-                        <div class="px-3"><h3 class="pt-1">Bills</h3></div>
-                        <div class="px-3">
+                        <div class="px-3 mx-auto"><h3 class="pt-1">Bills</h3></div>
+                        <div class="px-3 mx-auto">
                             <a type="button" class="btn btn-danger mr-3" href="{{ route('sale.create') }}">Sale</a>
                             <a type="button" class="btn btn-success mr-3" href="{{ route('sale.receive') }}">Receive</a>
-                            <button type="button" class="btn btn-primary" onclick="exportTableToExcel('sales', 'sales')">Save</button>    
+                            <button type="button" class="btn btn-primary" onclick="exportTableToExcel('sales', 'sales')">Save</button>
                         </div>
                     </div>
                 </div>
-                <div class="pt-1">
-                    <nav aria-label="Page navigation flex-wrap" style="overflow-x: overlay;">
-                        <ul class="pagination justify-content-center m-1 ">
-                                <?php $character = range('A', "Z"); ?>
-                                <ul class="pagination">
-                                <li class="page-item {{isset($_GET['character']) ? '' : 'active'}}"><a class="page-link" style="padding: 5px;" href="sale">Recent</a></li>
-                                <li class="page-item {{$path == 'bill' ? 'active' : ''}}"><a class="page-link" style="padding: 5px;" href="sale?character=bill">Bill</a></li>
-                                @foreach($character as $alphabet)
-                                    <li class="page-item {{$path == $alphabet ? 'active' : ''}}"><a class="page-link" style="padding: 5px;" href="sale?character={{$alphabet}}"><strong>{{$alphabet}}</strong></a></li>
-                                @endforeach
-                                </ul>
-                        </ul>
-                    </nav>
-                </div>
+				<div class="p-1 d-flex justify-content-md-center" style="overflow-x:overlay;">
+					<ul class="list-group list-group-horizontal">
+					  <a class="page-link btn btn-secondary {{isset($_GET['character']) ? '' : 'active'}}" style="padding: 5px;" href="sale">Recent</a>
+					  <a class="page-link btn btn-secondary {{$path == 'bill' ? 'active' : ''}}" style="padding: 5px;" href="sale?character=bill">Bill</a>
+					  <?php $character = range('A', "Z"); ?>
+					  @foreach($character as $alphabet)
+					  	<a class="page-link btn btn-secondary {{$path == $alphabet ? 'active' : ''}}" style="padding: 5px;" href="sale?character={{$alphabet}}"><strong>{{$alphabet}}</strong></a>
+					  @endforeach
+					</ul>
+				</div>
 
-                <div class="card-body pt-1">
+                <div class="card-body pt-0">
                     <?php $sales = json_decode( $sales, true ); ?>
                     <?php $items = json_decode( $items, true ); ?>
                     @if(!empty($sales))
@@ -52,14 +48,14 @@
                                 <tr style="text-transform:capitalize;">
                                     @foreach($sales[0] as $key => $value)
                                         @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name')
-                                                
+
                                         @elseif ($key == 'customer_id')
                                             <th scope="col" class="align-middle">Customer Name</th>
                                         @elseif ($key == 'item_id')
                                             <th scope="col" class="align-middle">Item Name</th>
                                         @else
                                             <th scope="col" class="align-middle">{{ $key}}</th>
-                                        @endif  
+                                        @endif
                                     @endforeach
                                     <th scope="col" class="align-middle">Edit</th>
                                     <th scope="col" class="align-middle">Delete</th>
@@ -76,7 +72,7 @@
                                             @elseif ($key == 'customer_id')
                                                 <td>{{$sale['name']}}</td>
                                             @elseif ($key == 'item_id')
-                                                <?php 
+                                                <?php
                                                     $key = array_search($value, array_column($items, 'id'));
                                                     $name = $items[$key]['name'];
                                                     $sku = $items[$key]['sku'];

@@ -6,7 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Auth::routes();
+Auth::routes(['register' => false]);
 
 // for employee + admin users
 Route::middleware('can:create-vouchers')->group(function(){

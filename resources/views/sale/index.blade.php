@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-				<div class="p-1 d-flex justify-content-md-center" style="overflow-x:overlay;">
+				<div class="pt-1 d-flex justify-content-md-center" style="overflow-x:overlay;">
 					<ul class="list-group list-group-horizontal">
 					  <a class="page-link btn btn-secondary {{isset($_GET['character']) ? '' : 'active'}}" style="padding: 5px;" href="sale">Recent</a>
 					  <a class="page-link btn btn-secondary {{$path == 'bill' ? 'active' : ''}}" style="padding: 5px;" href="sale?character=bill">Bill</a>
@@ -39,7 +39,7 @@
 					</ul>
 				</div>
 
-                <div class="card-body pt-0">
+                <div class="card-body p-1">
                     <?php $sales = json_decode( $sales, true ); ?>
                     <?php $items = json_decode( $items, true ); ?>
                     @if(!empty($sales))

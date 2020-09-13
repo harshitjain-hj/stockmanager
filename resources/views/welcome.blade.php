@@ -4,15 +4,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>UNIC-Warehouse</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
+		<link rel="manifest" href="{{ asset('css/manifest.json') }}">
+
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #343a40;
+                background-color: #131313;
                 color: #fff;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
@@ -45,12 +47,12 @@
             }
 
             .title {
-                font-size: 84px;
-            }
+                font-size: 44px;
+			}
 
             .links > a {
                 color: #fff;
-                padding: 0 25px;
+                padding: 0 10px;
                 font-size: 13px;
                 font-weight: 600;
                 letter-spacing: .1rem;
@@ -86,7 +88,13 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Manage
+					Welcome to<br/>
+                    <strong>UNIC Sales</strong> Warehouse
+                </div>
+				<div class="links">
+					<a href="https://goo.gl/maps/M7iTZDpcsFt8oRwcA"><img src="{{ url('/images/gmap.png') }}" width="35px"></a>
+					<a href="mailto: gmail@gmail.com"><img src="{{ url('/images/gmail.png') }}" width="35px"></a>
+					<a href="https://api.whatsapp.com/send?phone=91phonenumber"><img src="{{ url('/images/whatsapp.png') }}" width="35px"></a>
                 </div>
             </div>
         </div>

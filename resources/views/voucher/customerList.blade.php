@@ -31,9 +31,9 @@
                 <div class="col px-2 mb-3 mx-auto customer">
                     <a class="btn p-0 m-0" href="{{ route('option', $customer['id']) }}">
                         <div class="card border-light h-100">
-                            <img src="https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80" class="card-img-top" alt="...">
+                            <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295393_960_720.png" class="card-img-top" alt="...">
                             <div class="card-body p-1 text-center">
-                                <h5 class="card-title m-0">{{$customer->name}}</h5>
+                                <h5 class="card-title m-1">{{$customer->name}}</h5>
                             </div>
                         </div>
                     </a>

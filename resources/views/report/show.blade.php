@@ -108,7 +108,7 @@
 
                 </div>
 
-				<div class="p-1 d-flex justify-content-md-center" style="overflow-x:overlay;">
+				<div class="pt-1 d-flex justify-content-md-center" style="overflow-x:overlay;">
 					<ul class="list-group list-group-horizontal">
 					  <a class="page-link btn btn-secondary {{isset($_GET['character']) ? '' : 'active'}}" style="padding: 5px;" href="{{$repo['id']}}">Unpaid</a>
 					  <a class="page-link btn btn-secondary {{$path == 'bill' ? 'active' : ''}}" style="padding: 5px;" href="?character=bill">Bill</a>
@@ -119,7 +119,7 @@
 					</ul>
 				</div>
 
-                <div class="card-body pt-1">
+                <div class="card-body p-1">
                 <?php $sales = json_decode( $sales, true ); ?>
                 @if(!empty($sales))
                     <table class="table table-hover table-sm table-responsive" id="{{$repo['name']}}">
@@ -162,8 +162,14 @@
                                             <td>{{$value}}</td>
                                         @endif
                                     @endforeach
-                                <td><a href="{{ route('sale.edit', $sale['id']) }}" onclick="return confirm('Are you sure you want to Edit in {{$sale['name']}} bill no. {{$sale['bill_no']}}?')"><img src="{{ URL::asset('images/edit.png')}}" alt="Delete" style="height: 22px; width: 22px; display: block; margin: auto;"></a></td>
-                                <td><a data-toggle="modal" data-target="#bill_{{$sale['id']}}"><img src="{{ URL::asset('images/delete.png')}}" alt="Delete" style="height: 22px; width: 22px; display: block; margin: auto;"></a></td>
+                                <td>
+									<a href="{{ route('sale.edit', $sale['id']) }}" class="badge badge-warning" onclick="return confirm('Are you sure you want to Edit in {{$sale['name']}} bill no. {{$sale['bill_no']}}?')">EDIT
+									</a>
+								</td>
+                                <td><a data-toggle="modal" data-target="#bill_{{$sale['id']}}" class="badge badge-danger">
+									DEL
+									<!-- <img src="{{ URL::asset('images/delete.png')}}" alt="Delete" style="height: 22px; width: 22px; display: block; margin: auto;"> -->
+								</a></td>
                             </tr>
                             @endforeach
                         </tbody>

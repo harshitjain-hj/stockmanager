@@ -24,7 +24,7 @@
 						</div>
                 </div>
 
-                <div class="card-body pt-0">
+                <div class="card-body px-1 py-0">
                     @if(!empty($repos))
                         <table class="table table-hover table-sm table-responsive-md" id="report">
                             <thead>
@@ -33,10 +33,10 @@
                                         @if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'name' || $key == 'remain_assets')
 
                                         @elseif ($key == 'customer_id')
-                                            <th scope="col" class="align-middle">Customer Name</th>        
+                                            <th scope="col" class="align-middle">Customer Name</th>
                                         @else
                                             <th scope="col" class="align-middle">{{ $key }}</th>
-                                        @endif  
+                                        @endif
                                     @endforeach
                                     @foreach($items as $item)
                                         <th scope="col" class="align-middle">{{ $item['name'] }} {{ $item['sku'] }}</th>
@@ -53,7 +53,7 @@
                                                 <td>{{$repo['name']}}</td>
                                             @elseif ($key == 'remain_assets')
                                                 @if(json_decode($value, true))
-                                                    @foreach(json_decode($value, true) as $item)   
+                                                    @foreach(json_decode($value, true) as $item)
                                                         <td>{{$item['asset_remain']}}</td>
                                                     @endforeach
                                                 @else

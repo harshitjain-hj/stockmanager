@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Manage</title>
+    <title>UNIC-Warehouse</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -57,6 +57,9 @@
     <link rel="manifest" href="{{ asset('css/manifest.json') }}">
 
     <style>
+		.bg-dark {
+			background-color: #131313 !important;
+		}
         .loader-wrapper {
             width: 100%;
             height: 100%;
@@ -68,7 +71,6 @@
             justify-content: center;
             align-items: center;
         }
-
     </style>
     <script>
         $(window).on("load",function(){

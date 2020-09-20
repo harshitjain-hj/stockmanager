@@ -1,79 +1,51 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+<h1 align="center"> WAREHOUSE AUTOMATION 🤖</h1>
+<h3 align="center"> Custom accounting software application capable of handling different warehouse departments with ease.❤️</h3>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## The general way 🚴🏻‍♂️ -
+Creating the invoices and bills and summarizing it at the end of the day and generating a report for each customer outstanding by maintaining bill books and notebooks.
 
-## About Laravel
+## Problem with it 🚫 -
+1. Creating a summary and report takes a substantial amount of time each day. ⌚
+2. Informing customers about their up to-dated outstanding real-time. 🤝🏻
+3. Can potentially cause loss if the customer is ready to settle their outstanding but inability to tell them their up to-dated outstanding instantaneously. 📉
+4. Human error while creating a summary or report and ability to rectify it. ❌
+5. Need for cross-checking of invoices and bills with the customer at the time of issues.⏳
+6. Storing and maintaining all records for future needs. 📚
+7. Inability to gather insights from past data. 🕳️
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Analysing the cause 🔍 -
+1. Well most of the problems appear to be caused because of two reasons inability to create reports regularly and possible human error during the creation of it.
+2. Unable to make queries through records due to an abundance of it.  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Pairing the Technology with the Solution 🔌 -
+An application that is capable of generating bills, making a summary through it, and generating reports based on bills on the go.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Hence, project **WAREHOUSE AUTOMATION**. 🥂
 
-## Learning Laravel
+## Features -
+1. Display inventory of the items in the warehouse.
+2. Creation and updation of inventory.
+3. Creation and updation of bills and generate summary and report based on it.
+4. Calculates overall sales volume, total sales, and the average sale price of each item.
+5. Display and print customer reports and all the bills associated with him/her.    
+Special features
+6. Ability to create and print point of sale vouchers.
+7. Past 30-day sales comparison.
+8. Multirole authentication for Admin, employee, and customers.
+9. All the features are available on the website as well as the app.  
+10. Automatic emailing of reports to the customer (Ongoing).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Screenshots 🖼️-
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+<!-- ![Home page](screenshots/home_page.png) -->
+<!-- <div align="center"> -->
+<img src="screenshots/home_page.png" width="99%">
+<!-- ![Home page](screenshots/report_page.png)
+![Home page](screenshots/pos_slip.png) -->
 
-## Laravel Sponsors
+ <img src="screenshots/report_page.png" width="84%"> <img src="screenshots/pos_slip.png" width="15%">
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Database Schema 🧾-
+The skeleton structure representing the logical view of the entire database of the project.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-- [云软科技](http://www.yunruan.ltd/)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+![database schema](other/database_schema-dark.png)

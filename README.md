@@ -41,9 +41,9 @@ Special features
 <!-- <div align="center"> -->
 <img src="screenshots/home_page.png" width="99%">
 <!-- ![Home page](screenshots/report_page.png)
-![Home page](screenshots/pos_slip.png) -->
+![Home page](screenshots/POS_slip.png) -->
 
- <img src="screenshots/report_page.png" width="84%"> <img src="screenshots/pos_slip.png" width="15%">
+ <img src="screenshots/report_page.png" width="84%"> <img src="screenshots/POS_slip.png" width="15%">
 
 ## Database Schema 🧾-
 The skeleton structure representing the logical view of the entire database of the project.

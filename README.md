@@ -49,3 +49,6 @@ Special features
 The skeleton structure representing the logical view of the entire database of the project.
 
 ![database schema](other/database_schema-dark.png)
+
+## License 📄
+This project is Licensed under the [MIT License](LICENSE).

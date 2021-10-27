@@ -22,7 +22,7 @@ class HomeController extends Controller
                     ->get();
         foreach($items as $item) {
             $sales = Sale::selectRaw('item_id, bill_date, sum(qty) as total_qty, sum(total_amount) as total_amount')
-                    ->where('bill_date', '>=', date('Y-m-d',strtotime("-30 days")))
+                    ->where('bill_date', '>=', date('Y-m-d',strtotime("-90 days")))
                     ->where('item_id', $item['item_id'])
 					->where('bill_no', 'regexp', '^[A-Z]')
                     ->groupBy('bill_date')
